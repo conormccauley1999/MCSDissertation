@@ -1,18 +1,22 @@
+import argparse
+from json import load
 import json_lines
 import time
 from collections import defaultdict
 from scipy import sparse
 from scipy.io import savemat
 
-FRIENDS_PATH = './data/friends_1000.jl'
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('filename', help='name of json lined file in data directory')
+    parser.add_argument('-m', '--mode', choices=['friends'], help='type of data that is being loaded')
+    args = parser.parse_args()
+    if args.mode == 'friends':
+        load_friends(args.filename)
 
 
-def str_to_uid(string):
-    # strip 'profiles/' and convert to integer
-    return int(string[9:])
-
-
-def load_friends():
+def load_friends(filename):
     # logging
     print('Loading friends')
     start_time = time.time()
@@ -30,7 +34,7 @@ def load_friends():
         uid_to_idx[uid] = idx
         return idx + 1
     # iterate over dataset
-    with open(FRIENDS_PATH, 'rb') as f:
+    with open(f'./data/{filename}.jl', 'rb') as f:
         for item in json_lines.reader(f):
             uid = str_to_uid(item['steamid'])
             idx = add_uid(uid, idx)
@@ -46,11 +50,16 @@ def load_friends():
     for i in range(N):
         for j in friend_map[i]:
             friends[i, j] = 1
-    savemat('friends.mat', mdict={'friends': friends})
+    savemat(f'./data/{filename}.mat', mdict={'friends': friends})
     # logging
     end_time = time.time()
     print(f'Loaded friends for {len(unique_uids)} users in {int(end_time - start_time)} seconds')
 
 
+def str_to_uid(string):
+    # strip 'profiles/' and convert to integer
+    return int(string[9:])
+
+
 if __name__ == '__main__':
-    load_friends()
+    main()
