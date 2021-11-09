@@ -1,3 +1,4 @@
+from collections import defaultdict
 from json_lines import reader as jl_reader
 from scipy import sparse
 from scipy.io import savemat
@@ -15,9 +16,10 @@ def load_ratings(start_page, end_page, threshold, verbose):
     print(f'Loading ratings for pages {start_page}-{end_page}')
     t = time()
     # data storing
-    user_map = {} # map user_id to user_index
-    game_map = {} # map game_id to game_index
-    user_ratings = {} # user game ratings
+    user_map = {} # map user id to index
+    game_map = {} # map game id to index
+    user_ratings = {} # game ratings for each user
+    num_ratings = defaultdict(int) # number of ratings for each game
     user_count = 0 # user index counter
     game_count = 0 # game index counter
     # iterate over review pages
@@ -43,20 +45,30 @@ def load_ratings(start_page, end_page, threshold, verbose):
                     game_idx = game_map[game_id]
                     # store the rating
                     user_ratings[user_idx][rating].add(game_idx)
+                    num_ratings[game_idx] += 1
                 # verbose logging
                 if verbose and not user_count % LOG_FREQUENCY:
                     print(f'{user_count} users parsed (page = {page}), {game_count} games found')
+    # remove games without a certain number of reviews
+    filt_game_map = {} # map original game index to filtered game index
+    filt_game_count = 0 # filtered game index counter
+    for game_idx in range(game_count):
+        if num_ratings[game_idx] >= threshold:
+            filt_game_map[game_idx] = filt_game_count
+            filt_game_count += 1
     # logging
+    print(f'Ignoring {game_count - filt_game_count} games')
     print(f'Loaded games in {int(time() - t)} seconds')
-    print(f'Generating matrix ({user_count} x {game_count})')
+    print(f'Generating matrix ({user_count} x {filt_game_count})')
     t = time()
     # convert data into sparse matrix and save
-    matrix = sparse.lil_matrix((user_count, game_count))
+    matrix = sparse.lil_matrix((user_count, filt_game_count))
     for user_idx in range(user_count):
-        for game_idx in user_ratings[user_idx][0]:
-            matrix[user_idx, game_idx] = -1
-        for game_idx in user_ratings[user_idx][1]:
-            matrix[user_idx, game_idx] = 1
+        for polarity, ratings in zip([-1, 1], user_ratings[user_idx]):
+            for game_idx in ratings:
+                if game_idx in filt_game_map:
+                    filt_game_idx = filt_game_map[game_idx]
+                    matrix[user_idx, filt_game_idx] = polarity
     savemat(f'./data/matrices/ratings_{start_page}-{end_page}.mat', mdict={'R': matrix})
     # logging
     print(f'Generated matrix in {int(time() - t)} seconds')
