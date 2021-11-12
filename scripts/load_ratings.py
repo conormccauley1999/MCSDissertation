@@ -6,10 +6,6 @@ from time import time
 
 from helpers import str_to_uid
 
-LOG_FREQUENCY = 100000
-MIN_PAGE = 1
-MAX_PAGE = 524
-
 
 def load_ratings(start_page, end_page, threshold, verbose):
     # logging
@@ -47,7 +43,7 @@ def load_ratings(start_page, end_page, threshold, verbose):
                     user_ratings[user_idx][rating].add(game_idx)
                     num_ratings[game_idx] += 1
                 # verbose logging
-                if verbose and not user_count % LOG_FREQUENCY:
+                if verbose and not user_count % 100000:
                     print(f'{user_count} users parsed (page = {page}), {game_count} games found')
     # remove games without a certain number of reviews
     filt_game_map = {} # map original game index to filtered game index
@@ -72,6 +68,7 @@ def load_ratings(start_page, end_page, threshold, verbose):
     savemat(f'./data/matrices/ratings_{start_page}-{end_page}.mat', mdict={'R': matrix})
     # logging
     print(f'Generated matrix in {int(time() - t)} seconds')
+    return matrix
 
 
 if __name__ == '__main__':
@@ -82,5 +79,4 @@ if __name__ == '__main__':
     parser.add_argument('-t', '--threshold', type=int, default=50, help='minimum number of reviews for game to be included')
     parser.add_argument('-v', '--verbose', action='store_true', help='output detailed progress')
     args = parser.parse_args()
-    assert MIN_PAGE <= args.start_page <= args.end_page <= MAX_PAGE
     load_ratings(args.start_page, args.end_page, args.threshold, args.verbose)
