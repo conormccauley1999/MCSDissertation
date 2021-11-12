@@ -1,4 +1,6 @@
-import numpy as np
+from scipy.io import loadmat, savemat
+
+MATRIX_PATH_FMT = './data/matrices/%s.mat'
 
 
 def str_to_uid(string):
@@ -6,7 +8,11 @@ def str_to_uid(string):
     return int(string[16:])
 
 
-def list_to_npa(arr, i=-1, dtype=int):
-    if i != -1:
-        arr = [x[i] for x in arr]
-    return np.array(list(map(dtype, arr)))
+def save_matrix(filename, key, matrix):
+    path = MATRIX_PATH_FMT % filename
+    savemat(path, mdict={key: matrix})
+
+
+def load_matrix(filename, key):
+    path = MATRIX_PATH_FMT % filename
+    return loadmat(path)[key]

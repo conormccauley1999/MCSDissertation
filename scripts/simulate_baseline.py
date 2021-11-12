@@ -1,24 +1,41 @@
 import numpy as np
+from math import ceil
 from matplotlib import pyplot as plt
 from random import shuffle
+from numpy.core.numeric import load
 from scipy.io import loadmat
 from time import time
 
-from utils import list_to_npa
+from utils import load_matrix, save_matrix
 
 
-def sb_display(results):
-    # bins:
-    # (0.00-0.05,0.05-0.10,...,0.95-1.00)
-    x = list_to_npa(results, i=0, dtype=float)
-    y = list_to_npa(results, i=1, dtype=float)
-    s = list_to_npa(results, i=2, dtype=float)
-    s *= 150 / s.max()
-    plt.scatter(x, y, s=s)
+def convert_results(results, step=0.05):
+    num_bins = int(ceil(1 / step)) + 1
+    bins = []
+    for _ in range(num_bins): bins.append([])
+    for x, y, _ in results:
+        i = min(int(round(x / step)), num_bins)
+        bins[i].append(y)
+    for i in range(num_bins):
+        if not len(bins[i]):
+            bins[i] = [0.01]
+    x = np.array([
+        round(i * step, 2)
+        for i in range(num_bins)
+    ])
+    y = np.array([*map(np.mean, bins)])
+    e = np.array([*map(np.var, bins)])
+    return x, y, e
+
+
+def display_results(results):
+    x, y, e = convert_results(results)
+    plt.bar(x, y, width=0.04, yerr=e)
     plt.xlabel('Percent positive ratings')
     plt.ylabel('Percent audience reached')
-    plt.xlim([0, 1])
-    plt.ylim([0, 1])
+    plt.xticks(x[::2])
+    plt.xlim([-0.05, 1.05])
+    plt.ylim([0, 1.05])
     plt.show()
 
 
@@ -43,13 +60,8 @@ def simulate_baseline_for_game(ratings, start_size, growth_factor, min_proportio
     return users_reached / potential_users
 
 
-def simulate_baseline(filename, runs, start_size, growth_factor, min_proportion, verbose):
-    # read in matrix
-    matrix = loadmat(f'./data/matrices/{filename}.mat')['R']
-    user_count, game_count = matrix.shape
-    # logging
-    print(f'Running simulations for {game_count} games')
-    t = time()
+def simulate_baseline(matrix, runs, start_size, growth_factor, min_proportion, verbose):
+    game_count = matrix.shape[1]
     # data storing
     results = []
     # generate list of games to run simulations for
@@ -57,14 +69,18 @@ def simulate_baseline(filename, runs, start_size, growth_factor, min_proportion,
     if runs != 0:
         shuffle(indices)
         indices = indices[:runs]
+    # logging
+    print(f'Running {len(indices)} simulations from {game_count} games')
+    t = time()
+    i = 0
     # run simulations
-    for i in indices:
-        column = matrix.getcol(i)
+    for column_index in indices:
+        column = matrix.getcol(column_index)
         # get a list of ratings for the game
         indices = column.nonzero()[0]
         ratings = []
-        for index in indices:
-            ratings.append(column[index, 0])
+        for row_index in indices:
+            ratings.append(column[row_index, 0])
         # store some stats
         rating_count = len(ratings)
         percent_positive = ratings.count(1) / rating_count
@@ -72,8 +88,9 @@ def simulate_baseline(filename, runs, start_size, growth_factor, min_proportion,
         percent_reached = simulate_baseline_for_game(ratings, start_size, growth_factor, min_proportion)
         results.append((percent_positive, percent_reached, rating_count))
         # verbose logging
-        if verbose and not (i + 1) % 500:
-            print(f'{i + 1} simulations completed')
+        i += 1
+        if verbose and not i % 500:
+            print(f'{i} simulations completed')
     # logging
     print(f'Ran simulations in {int(time() - t)} seconds')
     return results
@@ -89,5 +106,6 @@ if __name__ == '__main__':
     parser.add_argument('-p', '--min_proportion', type=float, default=0.7, help='minimum proportion of audience needed to continue')
     parser.add_argument('-v', '--verbose', action='store_true', help='output detailed progress')
     args = parser.parse_args()
-    results = simulate_baseline(args.filename, args.runs, args.start_size, args.growth_factor, args.min_proportion, args.verbose)
-    sb_display(results)
+    matrix = load_matrix(args.filename, 'R')
+    results = simulate_baseline(matrix, args.runs, args.start_size, args.growth_factor, args.min_proportion, args.verbose)
+    display_results(results)

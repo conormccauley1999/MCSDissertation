@@ -1,10 +1,9 @@
 from collections import defaultdict
 from json_lines import reader as jl_reader
 from scipy import sparse
-from scipy.io import savemat
 from time import time
 
-from utils import str_to_uid
+from utils import save_matrix, str_to_uid
 
 
 def load_ratings(start_page, end_page, threshold, verbose):
@@ -65,7 +64,6 @@ def load_ratings(start_page, end_page, threshold, verbose):
                 if game_idx in filt_game_map:
                     filt_game_idx = filt_game_map[game_idx]
                     matrix[user_idx, filt_game_idx] = polarity
-    savemat(f'./data/matrices/ratings_{start_page}-{end_page}.mat', mdict={'R': matrix})
     # logging
     print(f'Generated matrix in {int(time() - t)} seconds')
     return matrix
@@ -79,4 +77,5 @@ if __name__ == '__main__':
     parser.add_argument('-t', '--threshold', type=int, default=50, help='minimum number of reviews for game to be included')
     parser.add_argument('-v', '--verbose', action='store_true', help='output detailed progress')
     args = parser.parse_args()
-    load_ratings(args.start_page, args.end_page, args.threshold, args.verbose)
+    matrix = load_ratings(args.start_page, args.end_page, args.threshold, args.verbose)
+    save_matrix(f'ratings_{args.threshold}_{args.start_pags}-{args.end_page}', 'R', matrix)
