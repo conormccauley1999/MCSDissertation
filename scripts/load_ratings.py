@@ -4,7 +4,7 @@ from scipy import sparse
 from scipy.io import savemat
 from time import time
 
-from helpers import str_to_uid
+from utils import str_to_uid
 
 
 def load_ratings(start_page, end_page, threshold, verbose):

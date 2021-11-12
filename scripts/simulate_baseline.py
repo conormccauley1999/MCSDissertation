@@ -4,7 +4,7 @@ from random import shuffle
 from scipy.io import loadmat
 from time import time
 
-from helpers import list_to_npa
+from utils import list_to_npa
 
 
 def sb_display(results):
