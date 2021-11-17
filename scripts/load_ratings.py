@@ -19,7 +19,7 @@ def load_ratings(start_page, end_page, threshold, verbose):
     game_count = 0 # game index counter
     # iterate over review pages
     for page in range(start_page, end_page + 1):
-        with open(f'./data/reviews/review_page{page}.jl', 'rb') as f:
+        with open(f'./data/jl/reviews/review_page{page}.jl', 'rb') as f:
             # for each user in this page
             for item in jl_reader(f):
                 # get the user id and store the index
@@ -78,4 +78,4 @@ if __name__ == '__main__':
     parser.add_argument('-v', '--verbose', action='store_true', help='output detailed progress')
     args = parser.parse_args()
     matrix = load_ratings(args.start_page, args.end_page, args.threshold, args.verbose)
-    save_matrix(f'ratings_{args.threshold}_{args.start_pags}-{args.end_page}', 'R', matrix)
+    save_matrix(f'ratings_{args.threshold}_{args.start_page}-{args.end_page}', matrix)

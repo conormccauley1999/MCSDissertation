@@ -1,10 +1,9 @@
 from json_lines import reader as jl_reader
 from collections import defaultdict
 from scipy import sparse
-from scipy.io import savemat
 from time import time
 
-from helpers import str_to_uid
+from utils import save_matrix, str_to_uid
 
 
 def load_friends(filename, verbose):
@@ -13,7 +12,7 @@ def load_friends(filename, verbose):
     t = time()
     friend_map = defaultdict(set)
     line_num = 0
-    with open(f'./data/{filename}.jl', 'rb') as f:
+    with open(f'./data/jl/{filename}.jl', 'rb') as f:
         for item in jl_reader(f):
             line_num += 1
             if verbose and not line_num % 10000: print(f'{line_num} lines parsed, {len(friend_map)} users found')
@@ -30,7 +29,7 @@ def load_friends(filename, verbose):
         for j in friend_map[i]:
             friend_mat[i, j] = 1
             friend_mat[j, i] = 1
-    savemat(f'./data/matrices/{filename}.mat', mdict={'F': friend_mat})
+    save_matrix(filename, friend_mat)
     print(f'Generated matrix in {int(time() - t)} seconds')
 
 

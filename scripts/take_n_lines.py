@@ -1,9 +1,9 @@
 def take_n_lines(filename, n):
     lines = []
-    with open(f'./data/{filename}.jl', 'rb') as f:
+    with open(f'./data/jl/{filename}.jl', 'rb') as f:
         for _ in range(n):
             lines.append(f.readline())
-    with open(f'./data/{filename}_{n}.jl', 'wb+') as f:
+    with open(f'./data/jl/{filename}_{n}.jl', 'wb+') as f:
         f.writelines(lines)
 
 

@@ -8,11 +8,11 @@ def str_to_uid(string):
     return int(string[16:])
 
 
-def save_matrix(filename, key, matrix):
+def save_matrix(filename, matrix):
     path = MATRIX_PATH_FMT % filename
-    savemat(path, mdict={key: matrix})
+    savemat(path, mdict={'default': matrix})
 
 
-def load_matrix(filename, key):
+def load_matrix(filename):
     path = MATRIX_PATH_FMT % filename
-    return loadmat(path)[key]
+    return loadmat(path)['default']
