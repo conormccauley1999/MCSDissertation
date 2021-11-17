@@ -1,5 +1,4 @@
 import numpy as np
-from collections import defaultdict
 from math import ceil
 from matplotlib import pyplot as plt
 from random import shuffle
@@ -26,6 +25,7 @@ class RecSim:
         shuffle(column_indices)
         column_indices = column_indices[:self.n_sims]
         # run simulations
+        x = 0
         for column_index in column_indices:
             column = self.M_ratings.getcol(column_index)
             # get a list of users' clusters and their ratings for the game
@@ -42,6 +42,8 @@ class RecSim:
             pc_positive = n_positive / n_ratings
             pc_reached = n_reached / n_positive
             self.results.append((pc_positive, pc_reached))
+            x += 1
+            if (x % 100) == 0: print(x, self.n_games)
     
     def __simulate_game(self, ratings):
         n_reached = 0
