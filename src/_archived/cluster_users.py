@@ -20,10 +20,11 @@ def cluster_users(matrix, num_clusters, verbose):
 if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument('filename', help='name of ratings matrix file')
+    parser.add_argument('in_file', help='ratings matrix filename')
+    parser.add_argument('out_file', help='output matrix filename')
     parser.add_argument('-n', '--num_clusters', type=int, default=5, help='number of clusters')
     parser.add_argument('-v', '--verbose', action='store_true', help='output detailed progress')
     args = parser.parse_args()
-    matrix_ratings = load_matrix(args.filename)
+    matrix_ratings = load_matrix(args.in_file)
     matrix_clusters = cluster_users(matrix_ratings, args.num_clusters, args.verbose)
-    save_matrix(f'c{args.filename}_{args.num_clusters}', matrix_clusters)
+    save_matrix(args.out_file, matrix_clusters)

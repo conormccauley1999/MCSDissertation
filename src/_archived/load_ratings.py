@@ -135,7 +135,7 @@ def load_ratings(start_page=1, end_page=524, threshold=1000, verbose=True):
 if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument('out_file', help='matrix output file')
+    parser.add_argument('out_file', help='output matrix filename')
     parser.add_argument('-s', '--start_page', type=int, default=1, help='review page to start at')
     parser.add_argument('-e', '--end_page', type=int, default=524, help='review page to end at (inclusive)')
     parser.add_argument('-t', '--threshold', type=int, default=1000, help='minimum number of reviews for game to be included')

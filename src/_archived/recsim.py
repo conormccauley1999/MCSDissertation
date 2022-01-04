@@ -7,7 +7,7 @@ from utils import load_matrix
 
 
 class RecSim:
-    def __init__(self, M_ratings, M_clusters=None, n_clusters=5, n_sims=0, P_min=0.7, A0=10, G=5):
+    def __init__(self, M_ratings, M_clusters=None, n_clusters=5, n_sims=0, P_min=0.7, A0=100, G=5):
         self.M_ratings = M_ratings
         self.M_clusters = M_clusters
         self.is_baseline = (M_clusters is None)
@@ -43,7 +43,7 @@ class RecSim:
             pc_reached = n_reached / n_positive
             self.results.append((pc_positive, pc_reached))
             x += 1
-            if (x % 100) == 0: print(x, self.n_games)
+            if (x % 10) == 0: print(x, self.n_games)
     
     def __simulate_game(self, ratings):
         n_reached = 0
@@ -148,15 +148,15 @@ class RecSim:
             for i in range(n_bins)
         ])
         y = np.array(list(map(np.mean, bins)))
-        e = np.array(list(map(np.var, bins)))
+        e = np.array(list(map(np.std, bins)))
         return x, y, e
 
 
 if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument('ratings_file', help='name of ratings matrix file')
-    parser.add_argument('-c', '--clusters_file', type=str, default=None, help='name of clusters matrix file')
+    parser.add_argument('ratings_file', help='ratings matrix filename')
+    parser.add_argument('-c', '--clusters_file', type=str, default=None, help='clusters matrix filename')
     parser.add_argument('-n', '--n_sims', type=int, default=0, help='number of simulations to run (0 = all games)')
     parser.add_argument('-l', '--n_clusters', type=int, default=5, help='number of clusters users have been grouped into')
     parser.add_argument('-p', '--p_min', type=float, default=0.7, help='minimum proportion of audience needed to continue')
