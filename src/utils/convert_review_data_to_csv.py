@@ -15,9 +15,9 @@ NUM_REVIEW_PAGES = 524
 uid_to_int = lambda uid: int(uid[16:])
 
 
-def convert_review_data_to_csv(start_page=1, end_page=NUM_REVIEW_PAGES, logging=True):
+def convert_review_data_to_csv(start_page=1, end_page=NUM_REVIEW_PAGES, verbose=True):
     # logging
-    if logging: print(f'Converting review pages {start_page}-{end_page}')
+    if verbose: print(f'Converting review pages {start_page}-{end_page}')
     t = time()
     # iterate over review pages
     for page_num in range(start_page, end_page + 1):
@@ -53,10 +53,20 @@ def convert_review_data_to_csv(start_page=1, end_page=NUM_REVIEW_PAGES, logging=
             writer = csv_writer(f, delimiter=',')
             writer.writerows(review_data)
         # logging
-        if logging: print(f'Converted page {page_num}')
+        if verbose: print(f'Converted page {page_num}')
     # logging
-    if logging: print(f'Converted review pages in {int(time() - t)} seconds')
+    if verbose: print(f'Converted review pages in {int(time() - t)} seconds')
 
 
 if __name__ == '__main__':
-    convert_review_data_to_csv()
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-s', '--start_page', type=int, default=1, help='review page to start at')
+    parser.add_argument('-e', '--end_page', type=int, default=NUM_REVIEW_PAGES, help='review page to end at (inclusive)')
+    parser.add_argument('-v', '--verbose', action='store_true', help='output detailed progress')
+    args = parser.parse_args()
+    convert_review_data_to_csv(
+        start_page=args.start_page,
+        end_page=args.end_page,
+        verbose=args.verbose
+    )
