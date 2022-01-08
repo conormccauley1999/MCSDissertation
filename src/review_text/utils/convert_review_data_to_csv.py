@@ -3,13 +3,7 @@ from csv import writer as csv_writer
 from json_lines import reader as jl_reader
 from time import time
 
-# data paths
-PATH_REVIEW_NTXT = './data/raw/reviews/no_text/review_page%d.jl'
-PATH_REVIEW_TXT = './data/raw/reviews/text/reviewtext_page%d.jl'
-PATH_REVIEW_COMB = './data/raw/reviews/combined/page_%d.csv'
-
-# constants
-NUM_REVIEW_PAGES = 524
+from utils.review_constants import *
 
 # convert a Steam user ID to an integer
 uid_to_int = lambda uid: int(uid[16:])
@@ -36,7 +30,6 @@ def convert_review_data_to_csv(start_page=1, end_page=NUM_REVIEW_PAGES, verbose=
                         float(review['playtime_forever']),
                         int(review['votes_up']),
                         int(review['votes_funny']),
-                        review['language'],
                         ''
                     ])
         # load review text
@@ -46,7 +39,7 @@ def convert_review_data_to_csv(start_page=1, end_page=NUM_REVIEW_PAGES, verbose=
                 user_id = uid_to_int(item['steamid'])
                 for review in item['reviews']:
                     text = review['text']
-                    review_data[i][-1] = text.encode('utf-8')
+                    review_data[i][-1] = text
                     i += 1
         # save review page data as csv
         with open(PATH_REVIEW_COMB % page_num, 'w+', encoding='utf-8', newline='') as f:
