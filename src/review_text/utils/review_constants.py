@@ -10,7 +10,6 @@ NUM_REVIEW_PAGES = 524
 # review text
 REVIEW_HIDDEN = '(Review text hidden)'
 
-
 # review column indices
 class ReviewCols:
     UID=0
@@ -21,3 +20,6 @@ class ReviewCols:
     VOTES_UP=5
     VOTES_FUNNY=6
     TEXT=7
+
+# model paths
+MODEL_BERT_UNCASED = 'https://tfhub.dev/google/bert_uncased_L-12_H-768_A-12/1'
