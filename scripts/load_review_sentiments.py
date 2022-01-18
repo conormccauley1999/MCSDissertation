@@ -3,7 +3,7 @@ from csv import reader as csv_reader
 from time import time
 import pandas as pd
 
-from utils.review_constants import *
+from review_constants import *
 
 
 def load_review_sentiments(filename, verbose=True):

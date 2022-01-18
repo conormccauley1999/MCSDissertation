@@ -3,7 +3,7 @@ from csv import writer as csv_writer
 from json_lines import reader as jl_reader
 from time import time
 
-from utils.review_constants import *
+from review_constants import *
 
 # convert a Steam user ID to an integer
 uid_to_int = lambda uid: int(uid[16:])

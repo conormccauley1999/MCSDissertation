@@ -4,7 +4,7 @@ from spacy_langdetect import LanguageDetector
 from time import time
 import spacy
 
-from utils.review_constants import *
+from review_constants import *
 
 nlp = spacy.load('en_core_web_sm')
 nlp.add_pipe(LanguageDetector(), name='ld', last=True)
