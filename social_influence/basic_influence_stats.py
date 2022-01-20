@@ -1,28 +1,31 @@
 import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
 from collections import defaultdict
-from csv import reader as csv_reader
+from csv import reader as csv_reader, writer as csv_writer
 from time import time
 
 PATH_REVIEWS = './data/prepared/social_influence/reviews.csv'
 PATH_FRIENDS = './data/prepared/social_influence/friends.csv'
+PATH_INFLUENCE = './data/prepared/social_influence/influence.csv'
 SECONDS_PER_DAY = 60 * 60 * 24
 
 
-def basic_influence_stats(verbose=True):
+def basic_influence_stats(export_influence_data=False, verbose=True):
     friend_graph = load_friend_graph(verbose=verbose)
     review_data = load_review_data(verbose=verbose)
-    influence_counts, time_counts, influence_types = load_influenced_reviews(
+    influence_counts, time_counts, influence_types, extra_data = load_influenced_reviews(
         friend_graph,
         review_data,
+        export_influence_data=export_influence_data,
         verbose=verbose
     )
-    hist_num_influenced(influence_counts, max_amount=50, num_bins=50, verbose=verbose)
-    hist_influence_time(time_counts, max_amount=3000, num_bins=140, verbose=verbose)
-    table_influence_types(influence_types, verbose=verbose)
+    hist_num_influenced(influence_counts, extra_data['general'], max_amount=50, num_bins=50)
+    hist_influence_time(time_counts, extra_data['time'],max_amount=3000, num_bins=140)
+    table_influence_types(influence_types)
 
 
-def hist_num_influenced(influence_counts, max_amount=100, num_bins=100):
+def hist_num_influenced(influence_counts, extra_data, max_amount=100, num_bins=100):
     values = []
     total = excluded = 0
     for amount, count in influence_counts.items():
@@ -36,10 +39,13 @@ def hist_num_influenced(influence_counts, max_amount=100, num_bins=100):
     plt.xlabel('Number of influenced reviews')
     plt.ylabel('Number of users')
     plt.show()
-    print(f'Proportion excluded = {excluded / total}')
+    print('Influenced reviews:')
+    print(f'- proportion_excluded = {excluded / total}')
+    for label, value in extra_data.items():
+        print(f'- {label} = {value}')
 
 
-def hist_influence_time(time_counts, max_amount=100, num_bins=100):
+def hist_influence_time(time_counts, extra_data, max_amount=100, num_bins=100):
     values = []
     total = excluded = 0
     for amount, count in time_counts.items():
@@ -53,22 +59,28 @@ def hist_influence_time(time_counts, max_amount=100, num_bins=100):
     plt.xlabel('Number of days between reviews')
     plt.ylabel('Number of reviews')
     plt.show()
-    print(f'Proportion excluded = {excluded / total}')
+    print('Influenced review time diffs:')
+    print(f'- proportion_excluded = {excluded / total}')
+    for label, value in extra_data.items():
+        print(f'- {label} = {value}')
 
 
 def table_influence_types(influence_types):
+    print('Influenced review polarities:')
     labels = { 0: 'negative', 1: 'positive' }
     for i in range(2):
         for j in range(2):
-            print(f'influencer={labels[i]}, user={labels[j]}: {influence_types[i][j]}')
+            print(f'- influencer={labels[i]}, user={labels[j]}: {influence_types[i][j]}')
 
 
-def load_influenced_reviews(friend_graph, review_data, verbose=True):
+def load_influenced_reviews(friend_graph, review_data, export_influence_data=False, verbose=True):
     if verbose: print('Loading influence data')
     t = time()
     influenced_counts = {}
     influence_type_counts = [[0, 0], [0, 0]]
     time_counts = defaultdict(int)
+    time_diff_counts = []
+    influence_data = []
     # for each user
     for uid, friend_uids in friend_graph.items():
         if uid not in influenced_counts:
@@ -87,12 +99,41 @@ def load_influenced_reviews(friend_graph, review_data, verbose=True):
                     if user_ts < friend_ts:
                         influenced_counts[uid] += 1
                         influence_type_counts[user_pol][friend_pol] += 1
+                        time_diff = (friend_ts - user_ts) // SECONDS_PER_DAY
                         time_counts[(friend_ts - user_ts) // SECONDS_PER_DAY] += 1
+                        time_diff_counts.append(time_diff)
+                        if export_influence_data:
+                            influence_data.append((uid, friend_uid, gid, user_pol, friend_pol, user_ts, friend_ts))
+    influence_counts = []
     counts = defaultdict(int)
     for amount in influenced_counts.values():
+        influence_counts.append(amount)
         counts[amount] += 1
+    num_influenced = len(influence_data)
+    influence_counts = np.array(influence_counts)
+    time_diff_counts = np.array(time_diff_counts)
+    extra_data = {
+        'general': {
+            'num_influenced': num_influenced,
+            'median_influenced': np.median(influence_counts),
+            'mean_influenced': influence_counts.mean(),
+            'dev_influenced': influence_counts.std()
+        },
+        'time': {
+            'median_time': np.median(time_diff_counts),
+            'mean_time': time_diff_counts.mean(),
+            'dev_time': time_diff_counts.std()
+        }
+    }
     if verbose: print(f'Loaded influence data in {int(time() - t)} seconds')
-    return counts, time_counts, influence_type_counts
+    if export_influence_data:
+        if verbose: print(f'Exporting influence data')
+        t = time()
+        with open(PATH_INFLUENCE, 'w+', newline='') as f:
+            writer = csv_writer(f, delimiter=',')
+            writer.writerows(influence_data)
+        if verbose: print(f'Exported influence data in {int(time() - t)} seconds')
+    return counts, time_counts, influence_type_counts, extra_data
 
 
 def load_friend_graph(verbose=True):
@@ -133,8 +174,10 @@ def load_review_data(verbose=True):
 if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser()
+    parser.add_argument('-e', '--export_influence_data', action='store_true', help='export data on influenced reviews')
     parser.add_argument('-v', '--verbose', action='store_true', help='output detailed progress')
     args = parser.parse_args()
     basic_influence_stats(
+        export_influence_data=args.export_influence_data,
         verbose=args.verbose
     )
