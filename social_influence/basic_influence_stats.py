@@ -1,5 +1,4 @@
 import matplotlib.pyplot as plt
-import numpy as np
 import pandas as pd
 from collections import defaultdict
 from csv import reader as csv_reader
@@ -10,17 +9,23 @@ PATH_FRIENDS = './data/prepared/social_influence/friends.csv'
 SECONDS_PER_DAY = 60 * 60 * 24
 
 
-def hist_num_influenced(max_amount=100, num_bins=100, verbose=True):
+def basic_influence_stats(verbose=True):
     friend_graph = load_friend_graph(verbose=verbose)
     review_data = load_review_data(verbose=verbose)
-    inf_counts, time_counts, inf_type_counts = load_influenced_reviews(
+    influence_counts, time_counts, influence_types = load_influenced_reviews(
         friend_graph,
         review_data,
         verbose=verbose
     )
+    hist_num_influenced(influence_counts, max_amount=50, num_bins=50, verbose=verbose)
+    hist_influence_time(time_counts, max_amount=3000, num_bins=140, verbose=verbose)
+    table_influence_types(influence_types, verbose=verbose)
+
+
+def hist_num_influenced(influence_counts, max_amount=100, num_bins=100):
     values = []
     total = excluded = 0
-    for amount, count in inf_counts.items():
+    for amount, count in influence_counts.items():
         total += count
         if amount > max_amount:
             excluded += count
@@ -32,21 +37,30 @@ def hist_num_influenced(max_amount=100, num_bins=100, verbose=True):
     plt.ylabel('Number of users')
     plt.show()
     print(f'Proportion excluded = {excluded / total}')
-    # time diff histogram
+
+
+def hist_influence_time(time_counts, max_amount=100, num_bins=100):
     values = []
     total = excluded = 0
     for amount, count in time_counts.items():
         total += count
-        if amount > 3000:
+        if amount > max_amount:
             excluded += count
             continue
         values.extend([amount] * count)
     df = pd.DataFrame(values)
-    df.plot.hist(bins=140, legend=None)
+    df.plot.hist(bins=num_bins, legend=None)
     plt.xlabel('Number of days between reviews')
     plt.ylabel('Number of reviews')
     plt.show()
     print(f'Proportion excluded = {excluded / total}')
+
+
+def table_influence_types(influence_types):
+    labels = { 0: 'negative', 1: 'positive' }
+    for i in range(2):
+        for j in range(2):
+            print(f'influencer={labels[i]}, user={labels[j]}: {influence_types[i][j]}')
 
 
 def load_influenced_reviews(friend_graph, review_data, verbose=True):
@@ -121,8 +135,6 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-v', '--verbose', action='store_true', help='output detailed progress')
     args = parser.parse_args()
-    hist_num_influenced(
-        max_amount=50,
-        num_bins=50,
+    basic_influence_stats(
         verbose=args.verbose
     )
