@@ -14,14 +14,15 @@ SECONDS_PER_DAY = 60 * 60 * 24
 def basic_influence_stats(export_influence_data=False, verbose=True):
     friend_graph = load_friend_graph(verbose=verbose)
     review_data = load_review_data(verbose=verbose)
-    influence_counts, time_counts, influence_types, extra_data = load_influenced_reviews(
+    influence_counts, time_counts, influence_types, pp_pir_counts, extra_data = load_influenced_reviews(
         friend_graph,
         review_data,
         export_influence_data=export_influence_data,
         verbose=verbose
     )
     hist_num_influenced(influence_counts, extra_data['general'], max_amount=50, num_bins=50)
-    hist_influence_time(time_counts, extra_data['time'],max_amount=3000, num_bins=140)
+    hist_influence_time(time_counts, extra_data['time'], max_amount=3000, num_bins=140)
+    hist_perc_positive_pirs(pp_pir_counts, max_amount=100, num_bins=100)
     table_influence_types(influence_types)
 
 
@@ -65,6 +66,28 @@ def hist_influence_time(time_counts, extra_data, max_amount=100, num_bins=100):
         print(f'- {label} = {value}')
 
 
+def hist_perc_positive_pirs(pir_counts, max_amount=10, num_bins=100):
+    values = []
+    total = excluded = zero = 00
+    for amount, count in pir_counts.items():
+        count = int(count)
+        total += count
+        if amount == 0:
+            zero += count
+        if amount > max_amount:
+            excluded += count
+            continue
+        values.extend([amount] * count)
+    df = pd.DataFrame(values)
+    df.plot.hist(bins=num_bins, legend=None)
+    plt.xlabel('Percentage of PIRs that are positive')
+    plt.ylabel('Number of users')
+    plt.show()
+    print('PIRs:')
+    print(f'- proportion_excluded = {excluded / total}')
+    print(f'- proportion_zero = {zero / total}')
+
+
 def table_influence_types(influence_types):
     print('Influenced review polarities:')
     labels = { 0: 'negative', 1: 'positive' }
@@ -81,10 +104,12 @@ def load_influenced_reviews(friend_graph, review_data, export_influence_data=Fal
     time_counts = defaultdict(int)
     time_diff_counts = []
     influence_data = []
+    pp_pir_counts = defaultdict(float)
     # for each user
     for uid, friend_uids in friend_graph.items():
         if uid not in influenced_counts:
             influenced_counts[uid] = 0
+        user_pos = user_neg = 0
         user_data = review_data[uid]
         # for each game user reviewed
         for gid in user_data['gids']:
@@ -102,8 +127,14 @@ def load_influenced_reviews(friend_graph, review_data, export_influence_data=Fal
                         time_diff = (friend_ts - user_ts) // SECONDS_PER_DAY
                         time_counts[(friend_ts - user_ts) // SECONDS_PER_DAY] += 1
                         time_diff_counts.append(time_diff)
+                        user_pos += 1
                         if export_influence_data:
                             influence_data.append((uid, friend_uid, gid, user_pol, friend_pol, user_ts, friend_ts))
+                else:
+                    user_neg += 1
+        if user_pos != 0 or user_neg != 0:
+            user_perc = round(100 * user_pos / (user_pos + user_neg), 2)
+            pp_pir_counts[user_perc] += 1
     influence_counts = []
     counts = defaultdict(int)
     for amount in influenced_counts.values():
@@ -133,7 +164,7 @@ def load_influenced_reviews(friend_graph, review_data, export_influence_data=Fal
             writer = csv_writer(f, delimiter=',')
             writer.writerows(influence_data)
         if verbose: print(f'Exported influence data in {int(time() - t)} seconds')
-    return counts, time_counts, influence_type_counts, extra_data
+    return counts, time_counts, influence_type_counts, pp_pir_counts, extra_data
 
 
 def load_friend_graph(verbose=True):

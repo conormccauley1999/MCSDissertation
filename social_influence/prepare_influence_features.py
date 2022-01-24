@@ -16,7 +16,6 @@ def prepare_influence_features(percent_negative=0.05, verbose=True):
         review_data,
         verbose=verbose
     )
-    return
     if verbose: print(f'Saving influence features')
     t = time()
     with open(PATH_FEATURES, 'w+', newline='') as f:
