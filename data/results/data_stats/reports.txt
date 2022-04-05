@@ -1,0 +1,117 @@
+>>> 01_HIST_FRIENDS <<<
+=== STATS REPORT ===
+- length=4183276
+- mean=28.47915126804925
+- std=46.964504216250766
+- median=16.0
+- q75=35.0, q25=7.0, iqr=28.0
+=== OUTLIER REPORT ===
+- excluded 110320 out of 4183276 (0.026371676169585752)
+- min_old=1, max_old=2053
+- min_new=1, max_new=119
+
+>>> 02_HIST_GROUP_USERS <<<
+=== STATS REPORT ===
+- length=5981137
+- mean=8.97812221990568
+- std=339.29011304305214
+- median=1.0
+- q75=3.0, q25=1.0, iqr=2.0
+=== OUTLIER REPORT ===
+- excluded 337472 out of 5981137 (0.056422716951643144)
+- min_old=1, max_old=310646
+- min_new=1, max_new=12
+
+>>> 03_HIST_USER_GROUPS <<<
+=== STATS REPORT ===
+- length=4183276
+- mean=12.836680869251754
+- std=37.23680180993714
+- median=4.0
+- q75=12.0, q25=1.0, iqr=11.0
+=== OUTLIER REPORT ===
+- excluded 229697 out of 4183276 (0.05490840193188305)
+- min_old=0, max_old=2224
+- min_new=0, max_new=45
+
+>>> 04_HIST_USER_REVIEWS <<<
+=== STATS REPORT ===
+- length=2049646
+- mean=4.655833739094458
+- std=16.862597122000142
+- median=2.0
+- q75=4.0, q25=1.0, iqr=3.0
+=== OUTLIER REPORT ===
+- excluded 63972 out of 2049646 (0.031211243307380884)
+- min_old=1, max_old=5235
+- min_new=1, max_new=22
+
+>>> 05_HIST_GAME_REVIEWS <<<
+=== STATS REPORT ===
+- length=57631
+- mean=165.58468532560602
+- std=3611.086909627601
+- median=7.0
+- q75=31.0, q25=2.0, iqr=29.0
+=== OUTLIER REPORT ===
+- excluded 5034 out of 57631 (0.087348822682237)
+- min_old=1, max_old=753161
+- min_new=1, max_new=161
+
+>>> 06_HIST_USER_POLARITIES_1 <<<
+=== STATS REPORT ===
+- length=2049646
+- mean=0.8858035956954274
+- std=0.25195974192446213
+- median=1.0
+- q75=1.0, q25=0.9318181818181818, iqr=0.06818181818181823
+
+>>> 07_HIST_USER_POLARITIES_5 <<<
+=== STATS REPORT ===
+- length=444863
+- mean=0.8584297413722493
+- std=0.16575808776142945
+- median=0.9
+- q75=1.0, q25=0.8, iqr=0.19999999999999996
+
+>>> 08_BARS_COUNTS <<<
+=== Counts ===
+Pol: pos=8113706, %pos=0.85, neg=1429105, %neg=0.15
+EA: ea=918570, %ea=0.096, nea=8624241, %nea=0.904
+Upd: upd=1374710, %upd=0.144, nupd=8168101, %nupd=0.856
+
+>>> 10_HIST_REVIEW_PLAYTIMES <<<
+=== STATS REPORT ===
+- length=9542811
+- mean=159.11410520443067
+- std=540.6030757956179
+- median=12.2
+- q75=62.7, q25=2.9, iqr=59.800000000000004
+=== OUTLIER REPORT ===
+- excluded 1573427 out of 9542811 (0.1648808721036181)
+- min_old=0.0, max_old=63559.6
+- min_new=0.0, max_new=152.4
+
+>>> 11_HIST_REVIEW_VOTES <<<
+=== STATS REPORT ===
+- length=9542811
+- mean=4.32535832471166
+- std=22.96303456128898
+- median=0.0
+- q75=2.0, q25=0.0, iqr=2.0
+=== OUTLIER REPORT ===
+- excluded 431702 out of 9542811 (0.045238452275749776)
+- min_old=0, max_old=999
+- min_new=0, max_new=17
+
+>>> 14_HIST_REVIEW_WORDS <<<
+=== STATS REPORT ===
+- length=2367310
+- mean=62.71249139318467
+- std=134.34523454796184
+- median=20.0
+- q75=57.0, q25=8.0, iqr=49.0
+=== OUTLIER REPORT ===
+- excluded 107397 out of 2367310 (0.0453666820146073)
+- min_old=1, max_old=7993
+- min_new=1, max_new=277
