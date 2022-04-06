@@ -5,9 +5,6 @@ __pycache__/
 .ipynb_checkpoints/
 
 # directories
-_archived/
 data/prepared/
 data/raw/
 data/samples/
-literature/
-report/

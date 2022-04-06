@@ -1,0 +1,28 @@
+\begin{titlepage}
+
+\center
+\includegraphics{title/logo_col.png}\\[1cm] 
+\Large \school\\[1.5cm]
+\ifdefined\department
+\large \department\\[1.5cm]
+\fi
+
+\makeatletter
+{ \huge \bfseries \thesistitle}\\[1.5cm]
+    
+\ifdefined\authorid
+\authorname\\
+\authorid\\[2cm]
+\else
+\authorname\\[2cm]
+\fi
+
+{\large \today}\\[2cm]
+    
+\vfill
+    A \typeofthesis\ submitted in partial fulfilment\\of the requirements for the degree of\\
+\degree
+
+\vfill
+
+\end{titlepage}

@@ -1,0 +1,107 @@
+\documentclass[a4paper,oneside,12pt]{book}
+
+\newcommand{\thesistitle}{Title}
+\newcommand{\degree}{Master in Computer Science}
+\newcommand{\typeofthesis}{dissertation}
+\newcommand{\authorname}{Conor McCauley}
+\newcommand{\keywords}{example}
+\newcommand{\school}{\href{http://www.scss.tcd.ie}{School of Computer Science and Statistics}}
+
+\AtBeginDocument{
+    \hypersetup{pdftitle=\thesistitle}
+    \hypersetup{pdfauthor=\authorname}
+    \hypersetup{pdfkeywords=\keywords}
+    \hypersetup{pdfsubject=\degree}
+}
+
+\usepackage[hyphens]{url}
+\usepackage[T1]{fontenc} 
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage[round,sort,comma,numbers]{natbib}
+\usepackage[a4paper,top=2.54cm,bottom=2.54cm,left=2.54cm,right=2.54cm,headheight=16pt]{geometry}
+\setlength{\marginparwidth}{2cm}
+\usepackage{amsmath}
+\usepackage[autostyle=true]{csquotes}
+\usepackage[pdftex]{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage[colorlinks=true, allcolors=black]{hyperref}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage[parfill]{parskip}
+\usepackage{setspace}
+\usepackage{enumerate}
+\usepackage{booktabs}
+\usepackage{fancyhdr}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage[symbol]{footmisc}
+\pagestyle{plain}
+
+\renewcommand{\familydefault}{\sfdefault}
+%\usepackage{mathpazo}
+
+\renewcommand{\theequation}{\arabic{equation}}
+\renewcommand{\lstlistlistingname}{List of \lstlistingname s}
+
+\usepackage{titlesec}
+\titleformat{\chapter}[hang] 
+{\normalfont\huge\bfseries}{\thechapter}{1cm}{} 
+
+\title{\thesistitle}
+\author{\authorname}
+
+\frontmatter
+\begin{document}
+\input{title/title.tex}
+\pagenumbering{roman}
+\section*{\Huge{Declaration}}
+\vspace{1cm}
+I hereby declare that this \typeofthesis\ is entirely my own work and that it has not been submitted as an exercise for a degree at this or any other university.
+
+\vspace{1cm}
+I have read and I understand the plagiarism provisions in the General Regulations of the University Calendar for the current year, found at \url{http://www.tcd.ie/calendar}.
+\vspace{1cm}
+
+I have also completed the Online Tutorial on avoiding plagiarism `Ready Steady Write', located at \url{http://tcd-ie.libguides.com/plagiarism/ready-steady-write}.
+\vspace{3cm}
+
+Signed:~\rule{5cm}{0.3pt}\hfill Date:~\rule{5cm}{0.3pt}
+
+\chapter*{Abstract}
+
+Text.
+
+\newpage
+\onehalfspacing\raggedright
+
+\section*{\Huge{Acknowledgements}}
+
+Text.
+
+\tableofcontents
+\listoffigures
+\listoftables
+\lstlistoflistings
+\newpage
+
+\section*{\Huge{Nomenclature}}
+\begin{tabular}{lp{9cm}l}
+ABC&Acronym\\
+\end{tabular}
+\vspace{2cm}
+
+\mainmatter
+
+\input{sections/01_introduction.tex}
+\input{sections/02_background.tex}
+\input{sections/03_dataset.tex}
+
+\bibliographystyle{unsrtnat}
+\bibliography{bibs/main}
+
+\appendix
+\renewcommand{\thechapter}{A\arabic{chapter}}
+\input{appendices/appendix1.tex}
+
+\end{document}
