@@ -4,7 +4,7 @@ This chapter will discuss, in detail, the methods used and the approaches taken 
 
 \section{Review Feature Prediction} \label{sec:DI_RF}
 
-In this section, the process of selecting and training optimal machine learning models with the goal of predicting three features of a given review will be discussed. The review features being predicted are: its polarity, how many helpfulness votes it received and the length of time the reviewer spent playing the game. The machine learning models that will be tested are BERT, specifically two pretrained DistilBERT models; MNB and CNB classifiers; linear SVMs for classification and regression, both with SGD and without; a ridge regressor; and multiple baseline classifiers and regressors.
+In this section, the process of selecting and training optimal machine learning models with the goal of predicting three features of a given review will be discussed. The review features being predicted are its polarity, how many helpfulness votes it received and the length of time the reviewer spent playing the game. The machine learning models that will be tested are BERT, specifically two pretrained DistilBERT models; MNB and CNB classifiers; linear SVMs for classification and regression, both with SGD and without; a ridge regressor; and multiple baseline classifiers and regressors.
 
 \subsection{Dataset Sampling} \label{sec:DI_RF_Sampling}
 
@@ -12,7 +12,7 @@ Due to the time and memory-consuming nature of the model training procedure in m
 
 Only reviews consisting of at least one word, determined by the process outlined in section \ref{sec:Dataset_RT_Langs}, were included when preparing the dataset samples. The language that a review was written in was considered a determining factor in relation to how well the trained models would be able to accurately predict the selected review features. As such, separate samples were prepared for reviews written in English\footnote{Reviews that were classified as English with a confidence of at least 70\% by the language detection algorithm discussed in \ref{sec:Dataset_RT_Langs} were included in the English-language samples.} and reviews written in any language (including English). Also of interest was the potential effect that the length of the review text, ie the word count, might have on the accuracy of the trained models' predictions. As such, separate samples were prepared for reviews that contained 50 words or more, referred to as `long' reviews; reviews that contained fewer than 50 words, referred to as `short' reviews; and reviews containing any number of words.
 
-Several samples were also prepared solely for the task of review polarity prediction. Due to the imbalanced nature of the dataset with regard to review polarity, 85\% of reviews are positive while only 15\% of reviews are negative, and, since this task is a classification problem, separate samples were prepared containing equal numbers of positive and negative reviews in order to more accurately determine how well the trained models were performing.
+Several samples were also prepared solely for the task of review polarity prediction. Due to the imbalanced nature of the dataset with regard to review polarity, 85\% of reviews are positive while only 15\% of reviews are negative, and, since this task is a classification problem, separate samples were prepared, containing equal numbers of positive and negative reviews in order to more accurately determine how well the trained models were performing.
 
 The names and characteristics of all of the prepared data samples are given in Table \ref{tab:DI_RF_Datasets}.
 
@@ -55,7 +55,7 @@ Very little preprocessing needed to be done to the data before it was passed int
 
 Optimal training parameters were selected for all of the BERT models used to predict review polarity by testing numerous combinations of parameters on a model trained using the \texttt{eng\_eq\_any} sample. Individually applying the hyperparameter tuning process to each of the dataset samples, even if it may have led to slightly better results for those samples, would have been far too time-consuming to carry out.
 
-The learning rate of the Adam optimiser, which is used by the classifier, was originally considered as a tunable parameter; however, experimenting with its value did not to lead to any improvements and, as such, it was not considered in the final approach. The two parameters which were settled on were the batch size and the number of epochs the model was to be trained for. The parameter values that were considered can be seen in Table \ref{tab:DI_RF_Pol_BERTHP}.
+The learning rate of the Adam optimiser, which is used by the classifier, was originally considered as a tunable parameter; however, experimenting with its value did not lead to any improvements and, as such, it was not considered in the final approach. The two parameters which were settled on were the batch size and the number of epochs the model was to be trained for. The parameter values that were considered can be seen in Table \ref{tab:DI_RF_Pol_BERTHP}.
 
 \begin{table}[ht]
     \centering
@@ -105,7 +105,7 @@ Unlike with BERT, significant preprocessing needed to be applied to the review t
     \item Apply TF-IDF weightings to the vectorised text.
 \end{enumerate}
 
-The text was also processed into various sets of $n$-grams before being used in model training; however, this process will be discussed in the following section. The list of stopwords used were provided by Python's NLTK library \cite{bird2009natural} which contains stopword lists for 24 different languages.
+The text was also processed into various sets of $n$-grams before being used in model training; however, this process will be discussed in the following section. The list of stopwords used was provided by Python's NLTK library \cite{bird2009natural} which contains stopword lists for 24 different languages.
 
 \paragraph{Hyperparameter Tuning}
 
@@ -158,7 +158,7 @@ The dataset samples were split into the same three sets, with the same proportio
 
 \paragraph{Preprocessing}
 
-As was also discussed previously, very little preprocessing needed to be done to the text data before being passed into the BERT model. However, a robust scaler was used to map the number of votes each review received down to a limited range centered around 0. A robust scaler was used due to the presence of outliers in the dataset.
+As was also discussed previously, very little preprocessing needed to be done to the text data before being passed into the BERT model. However, a robust scaler was used to map the number of votes each review received down to a limited range centred around 0. A robust scaler was used due to the presence of outliers in the dataset.
 
 \paragraph{Hyperparameter Tuning}
 
@@ -232,7 +232,7 @@ Two baseline regressors were also used for comparison: one which predicted the m
 
 The standard deviations of the NMSE losses for each model, despite being quite large, are almost identical and, as such, do not play an important role in determining the optimal choices of hyperparameters.
 
-For the SGD regressor, it would appear that a parameter value of $\alpha=10^{-4}$ with an $n$-gram range of $(1, 2)$ is the best choice; although, no combination of parameters appeared to perform particularly well. For the ridge regressor the optimal choice is slightly more obvious: a parameter value of $\alpha=10$ with an $n$-gram range of $(1, 2)$ produced the best results. For the LSVR, a parameter value of $\alpha=10$ also produces the best results. An $n$-gram range of $(1, 3)$ produced slightly better results than the other ranges, although this is not clear from the plots alone.
+For the SGD regressor, it would appear that a parameter value of $\alpha=10^{-4}$ with an $n$-gram range of $(1, 2)$ is the best choice; although, no combination of parameters appeared to perform particularly well. For the ridge regressor, the optimal choice is slightly more obvious: a parameter value of $\alpha=10$ with an $n$-gram range of $(1, 2)$ produced the best results. For the LSVR, a parameter value of $\alpha=10$ also produces the best results. An $n$-gram range of $(1, 3)$ produced slightly better results than the other ranges, although this is not clear from the plots alone.
 
 \paragraph{Training Procedure}
 
@@ -240,7 +240,7 @@ Each of the optimal regressors was trained and tested on the 6 imbalanced datase
 
 \subsection{Playtime} \label{sec:DI_RF_PT}
 
-The process of training the machine learning models to predict the amount of time reviewers spent playing the games they reviewed was almost identical to the process used to predict the number of helpfulness votes reviews received.
+The process of training the machine learning models to predict the amount of time that reviewers spent playing the games they reviewed was almost identical to the process used to predict the number of helpfulness votes reviews received.
 
 The data splitting, preprocessing\footnote{A robust scaler was also applied to the playtime values due to a similar presence of outliers.} and training procedure steps involved in the prediction of review playtime, regardless of the model being trained, are identical to the steps given in section \ref{sec:DI_RF_Votes} concerning the prediction of review votes. As such, they have been excluded.
 
@@ -321,7 +321,7 @@ The methodology underpinning this approach can be described as follows:
 \begin{enumerate}
     \item Select the reviews of users who've written at least $N$ reviews.
     \item Calculate the average rating, across the entire dataset, for each of the games being reviewed.
-    \item Convert these ratings into classes which correspond to Steam's own rating classification scheme.
+    \item Convert these ratings into classes that correspond to Steam's own rating classification scheme.
     \item Train models to predict the rating class of a game being reviewed using only the review text.
     \item Test this model on a per-user basis and determine the users whose reviews are predicted most accurately.
     \item These users could be considered `representative' of the reviewer population.
@@ -329,7 +329,7 @@ The methodology underpinning this approach can be described as follows:
 
 Much of the steps involved in this approach are essentially extensions to the work done to predict a review's polarity in section \ref{sec:DI_RF_Pol}. The goal, in this case, is to train a multiclass classifier to predict the average polarity of a game based on all of its reviews, rather than to predict the binary class of an individual review.
 
-A potential drawback to this approach is that, given a game with a positive rating of 70\%, we would expect 30\% of the review texts for that game, ie the negative ones, to portray a noticeably negative sentiment. This could be problematic since, in this example, 30\% of the training data could be considered bad or of a poor quality because the overall rating ought to be fairly positive. A key assumption is made in an attempt to overcome this drawback. This is assumption as follows: since a significant majority of the review data being processed for each game does actually align with its overall rating, the predictive model ought to be able to, on average, favour the good data and ignore the bad, ie noisy, data since there always exists much more good data.
+A potential drawback to this approach is that, given a game with a positive rating of 70\%, we would expect 30\% of the review texts for that game, ie the negative ones, to portray a noticeably negative sentiment. This could be problematic since, in this example, 30\% of the training data could be considered bad or of poor quality because the overall rating ought to be fairly positive. A key assumption is made in an attempt to overcome this drawback. This assumption is as follows: since a significant majority of the review data being processed for each game does actually align with its overall rating, the predictive model ought to be able to, on average, favour the good data and ignore the bad, ie noisy, data since there always exists much more good data.
 
 Another assumption made by this approach is that there are features within the review texts which occur more frequently for games of different average ratings. For example, we might expect extremely positive words like `amazing' or `fantastic' to occur more in reviews for games with a positive rating of 95\% than in reviews for games with a positive rating of 70\%. The hope is that the trained model will be able to discern these particular features from the otherwise noisy data.
 
@@ -372,7 +372,7 @@ For those reviews that remained, the average rating for each game was calculated
     \label{tab:DI_PU_Classes3}
 \end{table}
 
-Since the goal of this task is to determine representative users it is important that, for any particular user with reviews in a dataset sample, all of the valid reviews they've written are included and none of these reviews are split across different sample splits, eg the training and test splits. Because of this requirement, the training, validation and test splits were prepared in advance, rather than at runtime. The sample splitting was carried out so that the reviews of 80\% of users were in the training set, the reviews of 10\% of users were in the validation set and the reviews of the remaining 10\% of users were in the test set.
+Since the goal of this task is to determine representative users, it is important that, for any particular user with reviews in a dataset sample, all of the valid reviews they've written are included and none of these reviews are split across different sample splits, eg the training and test splits. Because of this requirement, the training, validation and test splits were prepared in advance, rather than at runtime. The sample splitting was carried out so that the reviews of 80\% of users were in the training set, the reviews of 10\% of users were in the validation set and the reviews of the remaining 10\% of users were in the test set.
 
 Separate samples were prepared for reviews written in English and reviews written in any language (including English). The names and characteristics of all of the prepared data samples are given in Table \ref{tab:DI_PU_Samples}.
 
@@ -423,7 +423,7 @@ The training and validation accuracies of the trained models for each combinatio
     \label{fig:DI_PU_BERTHP}
 \end{figure}
 
-Based on these results it would appear that 2 training epochs with a batch size of 64 is the optimal combination of parameters. Interestingly, the validation and training accuracies for this combination are nearly identical, indicating that the model is neither underfitting nor overfitting the training data.
+Based on these results it would appear that 2 training epochs with a batch size of 64 are the optimal combination of parameters. Interestingly, the validation and training accuracies for this combination are nearly identical, indicating that the model is neither underfitting nor overfitting the training data.
 
 \subsubsection{Training and Testing Procedure}
 
@@ -457,7 +457,7 @@ The models, hyperparameters and values that were varied were identical to those 
     \label{tab:DI_PU_BaseHP}
 \end{table}
 
-Two baseline classifiers were also used for comparison: one which predicted the most frequent class and one which predicted a random class based on the distribution of the classes in the dataset. The mean cross-validation accuracies can be seen in Figure \ref{fig:DI_PU_BaseHP}. The standard deviations, as was the case when predicting review polarities, were found to be insignificantly small and, as such, have not been included.
+Two baseline classifiers were also used for comparison: one which predicted the most frequent class and one which predicted a random class based on the overall distribution of the classes in the dataset. The mean cross-validation accuracies can be seen in Figure \ref{fig:DI_PU_BaseHP}. The standard deviations, as was the case when predicting review polarities, were found to be insignificantly small and, as such, have not been included.
 
 \begin{figure}[ht]
     \hspace*{-0.3in}
@@ -466,7 +466,7 @@ Two baseline classifiers were also used for comparison: one which predicted the 
     \label{fig:DI_PU_BaseHP}
 \end{figure}
 
-For the SGD classifier, it is quite clear that the optimal choice of hyperparameters is an $n$-gram range of $(1, 2)$ and a parameter value of $\alpha=10^{-5}$. For both NB classifiers, an $n$-gram range of $(1, 2)$ produced the best results. A parameter value of $\alpha=0.1$ produced the best results for the MNB classifier, while a value of $\alpha=1$ produced the best results for the CNB classifier. Finally, for the LSVC, the combination of hyperparameters which performed the best were an $n$-gram range of $(1, 2)$ with a parameter value of $C=1$. Interestingly, regardless of the classifier in question, an $n$-gram range $(1, 2)$ always produced better results than the other ranges.
+For the SGD classifier, it is quite clear that the optimal choice of hyperparameters is an $n$-gram range of $(1, 2)$ and a parameter value of $\alpha=10^{-5}$. For both NB classifiers, an $n$-gram range of $(1, 2)$ produced the best results. A parameter value of $\alpha=0.1$ produced the best results for the MNB classifier, while a value of $\alpha=1$ produced the best results for the CNB classifier. Finally, for the LSVC, the combination of hyperparameters that performed the best was an $n$-gram range of $(1, 2)$ with a parameter value of $C=1$. Interestingly, regardless of the classifier in question, an $n$-gram range $(1, 2)$ always produced better results than the other ranges.
 
 \subsubsection{Training and Testing Procedure}
 
