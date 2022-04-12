@@ -312,36 +312,162 @@ For the SGD regressor, the $n$-gram range of $(1, 2)$ clearly produces the best 
 
 \section{Representative Users} \label{sec:DI_RU}
 
-Text.
+In this section, the process of selecting and training optimal machine learning models with the goal of identifying users whose written reviews best represent the views of the total population will be discussed. The machine learning models that will be tested are the previously discussed DistilBERT models; MNB and CNB classifiers; a linear SVM classifier, both with SGD and without; and multiple baseline classifiers.
+
+\subsection{Methodology}
+
+The methodology underpinning this approach can be described as follows:
+
+\begin{enumerate}
+    \item Select the reviews of users who've written at least $N$ reviews.
+    \item Calculate the average rating, across the entire dataset, for each of the games being reviewed.
+    \item Convert these ratings into classes which correspond to Steam's own rating classification scheme.
+    \item Train models to predict the rating class of a game being reviewed using only the review text.
+    \item Test this model on a per-user basis and determine the users whose reviews are predicted most accurately.
+    \item These users could be considered `representative' of the reviewer population.
+\end{enumerate}
+
+Much of the steps involved in this approach are essentially extensions to the work done to predict a review's polarity in section \ref{sec:DI_RF_Pol}. The goal, in this case, is to train a multiclass classifier to predict the average polarity of a game based on all of its reviews, rather than to predict the binary class of an individual review.
+
+A potential drawback to this approach is that, given a game with a positive rating of 70\%, we would expect 30\% of the review texts for that game, ie the negative ones, to portray a noticeably negative sentiment. This could be problematic since, in this example, 30\% of the training data could be considered bad or of a poor quality because the overall rating ought to be fairly positive. A key assumption is made in an attempt to overcome this drawback. This is assumption as follows: since a significant majority of the review data being processed for each game does actually align with its overall rating, the predictive model ought to be able to, on average, favour the good data and ignore the bad, ie noisy, data since there always exists much more good data.
+
+Another assumption made by this approach is that there are features within the review texts which occur more frequently for games of different average ratings. For example, we might expect extremely positive words like `amazing' or `fantastic' to occur more in reviews for games with a positive rating of 95\% than in reviews for games with a positive rating of 70\%. The hope is that the trained model will be able to discern these particular features from the otherwise noisy data.
 
 \subsection{Dataset Sampling and Preparation}
 
-Text.
+Numerous samples of the dataset, each containing exactly 160 thousand reviews, were prepared and used to train the predictive models.
+
+First, reviews consisting of less than one word and reviews for `early access' games were excluded from the dataset. Reviews for games with fewer than 50 total reviews were also excluded. Finally, out of those reviews remaining, the reviews of users who had written fewer than 10 written reviews were excluded.
+
+For those reviews that remained, the average rating for each game was calculated and mapped to one of either 3 or 6 classes. These classes were chosen and named based roughly on the chart shown in Figure \ref{fig:SteamStore_Ratings}. The details of each of these sets of classes are given in Table \ref{tab:DI_PU_Classes6} and Table \ref{tab:DI_PU_Classes3}, respectively.
+
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{l l l}
+        \toprule
+        \textbf{Name} & \textbf{Acronym} & \textbf{Rating Range}\\\midrule
+        Very Positive & VP & $[0.95, 1.0]$\\
+        Positive & P & $[0.8, 0.95)$\\
+        Mostly Positive & MP & $[0.7, 0.8)$\\
+        Mixed & M & $[0.4, 0.7)$\\
+        Mostly Negative & MN & $[0.2, 0.4)$\\
+        Negative & N & $[0.0, 0.2)$\\
+        \bottomrule\\
+    \end{tabular}
+    \caption{Game rating classes used in 6-class approach.}
+    \label{tab:DI_PU_Classes6}
+\end{table}
+
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{l l l}
+        \toprule
+        \textbf{Name} & \textbf{Acronym} & \textbf{Rating Range}\\\midrule
+        Positive & P & $[0.7, 1.0]$\\
+        Mixed & M & $[0.4, 0.7)$\\
+        Negative & N & $[0.0, 0.4)$\\
+        \bottomrule\\
+    \end{tabular}
+    \caption{Game rating classes used in 3-class approach.}
+    \label{tab:DI_PU_Classes3}
+\end{table}
+
+Since the goal of this task is to determine representative users it is important that, for any particular user with reviews in a dataset sample, all of the valid reviews they've written are included and none of these reviews are split across different sample splits, eg the training and test splits. Because of this requirement, the training, validation and test splits were prepared in advance, rather than at runtime. The sample splitting was carried out so that the reviews of 80\% of users were in the training set, the reviews of 10\% of users were in the validation set and the reviews of the remaining 10\% of users were in the test set.
+
+Separate samples were prepared for reviews written in English and reviews written in any language (including English). The names and characteristics of all of the prepared data samples are given in Table \ref{tab:DI_PU_Samples}.
+
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{l|l l l}
+        \toprule
+        \textbf{Sample Name} & \textbf{Language} & \textbf{Classes} & \textbf{Size}\\\midrule
+        \texttt{eng\_6} & English & 6 & 160k\\
+        \texttt{eng\_3} & English & 3 & 160k\\
+        \texttt{any\_6} & Multilingual & 6 & 160k\\
+        \texttt{any\_3} & Multilingual & 3 & 160k\\
+        \bottomrule
+    \end{tabular}
+    \caption{Dataset samples and their characteristics for determining representative users.}
+    \label{tab:DI_PU_Samples}
+\end{table}
 
 \subsection{BERT}
 
-\subsubsection{Data Splitting and Preprocessing}
+\subsubsection{Preprocessing}
 
-Text.
+As was the case when predicting the polarity of reviews, very little preprocessing was needed before passing the data into the BERT model for training. The data, which had already been split into training, validation and test sets, were converted to tensors and used to fit the BERT classifier.
 
 \subsubsection{Hyperparameter Tuning}
 
-Text.
+Optimal training parameters were selected for all of the models using the results gathered by training models on the \texttt{eng\_6} sample. The same BERT hyperparameters that were varied when predicting the review features were also varied in this approach. The considered values can be seen in Table \ref{tab:DI_PU_BERTHP}.
+
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{l l}
+        \toprule
+        \textbf{Hyperparameter} & \textbf{Values}\\\midrule
+        Batch size & $16, 32, 64$\\
+        Epochs & $2, 3, 4$\\
+        \bottomrule\\
+    \end{tabular}
+    \caption{BERT hyperparameters for representative users.}
+    \label{tab:DI_PU_BERTHP}
+\end{table}
+
+The training and validation accuracies of the trained models for each combination of hyperparameters can be seen in Figure \ref{fig:DI_PU_BERTHP}.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[scale=0.7]{figures/05_impl/02_pu/plot_hyperparams_bert.png}
+    \caption{BERT hyperparameter tuning results for representative users ($n$ is batch size).}
+    \label{fig:DI_PU_BERTHP}
+\end{figure}
+
+Based on these results it would appear that 2 training epochs with a batch size of 64 is the optimal combination of parameters. Interestingly, the validation and training accuracies for this combination are nearly identical, indicating that the model is neither underfitting nor overfitting the training data.
 
 \subsubsection{Training and Testing Procedure}
 
-Text.
+BERT models were trained and validated for all 4 dataset samples using the aforementioned combination of hyperparameters and the appropriate choice of pretrained DistilBERT model, which depended on the language of the samples' reviews. Their performance was then tested using the relevant test set. The overall results of these tests, as well as the user-specific results, will be discussed in section \ref{sec:Res_RU}.
 
 \subsection{Other Models}
 
-\subsubsection{Data Splitting and Preprocessing}
+\subsubsection{Preprocessing}
 
-Text.
+The same preprocessing steps taken when predicting review polarities for non-BERT models in section \ref{sec:DI_RF_Pol} were also taken here. One important difference was that the previously prepared training and validation splits were merged into a single training set containing the reviews of 90\% of users.
 
 \subsubsection{Hyperparameter Tuning}
 
-Text.
+Optimal model parameters were again selected based on the results taken from the \texttt{eng\_6} sample.
+
+The models, hyperparameters and values that were varied were identical to those used in section \ref{sec:DI_RF_Pol}. These values can be seen in Table \ref{tab:DI_PU_BaseHP}.
+
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{l l l}
+        \toprule
+        \textbf{Model} & \textbf{Hyperparameter} & \textbf{Values}\\\midrule
+        All & $n$-gram range & $(1, 2), (1, 3), (1, 4)$\\
+        MNB & $\alpha$ & $0.01, 0.1, 1, 10$\\
+        CNB & $\alpha$ & $0.01, 0.1, 1, 10$\\
+        SGD & $\alpha$ & $10^{-4}, 10^{-5}, 10^{-6}$\\
+        LSVC & $C$ & $0.01, 0.1, 1, 10$\\
+        \bottomrule\\
+    \end{tabular}
+    \caption{Other model hyperparameters for representative users.}
+    \label{tab:DI_PU_BaseHP}
+\end{table}
+
+Two baseline classifiers were also used for comparison: one which predicted the most frequent class and one which predicted a random class based on the distribution of the classes in the dataset. The mean cross-validation accuracies can be seen in Figure \ref{fig:DI_PU_BaseHP}. The standard deviations, as was the case when predicting review polarities, were found to be insignificantly small and, as such, have not been included.
+
+\begin{figure}[ht]
+    \hspace*{-0.3in}
+    \includegraphics[scale=0.55]{figures/05_impl/02_pu/plot_hyperparams_base.png}
+    \caption{Other model hyperparameter tuning results for representative users.}
+    \label{fig:DI_PU_BaseHP}
+\end{figure}
+
+For the SGD classifier, it is quite clear that the optimal choice of hyperparameters is an $n$-gram range of $(1, 2)$ and a parameter value of $\alpha=10^{-5}$. For both NB classifiers, an $n$-gram range of $(1, 2)$ produced the best results. A parameter value of $\alpha=0.1$ produced the best results for the MNB classifier, while a value of $\alpha=1$ produced the best results for the CNB classifier. Finally, for the LSVC, the combination of hyperparameters which performed the best were an $n$-gram range of $(1, 2)$ with a parameter value of $C=1$. Interestingly, regardless of the classifier in question, an $n$-gram range $(1, 2)$ always produced better results than the other ranges.
 
 \subsubsection{Training and Testing Procedure}
 
-Text.
+Models were trained and tested for all of the dataset samples using the optimal choices of hyperparameters. As was the case with the BERT model, the performance of the models was evaluated with regard to the entire test set as well as on a per-user basis. These results will be discussed in section \ref{sec:Res_RU}.
