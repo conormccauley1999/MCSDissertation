@@ -10,7 +10,7 @@ The overall accuracy of all of the models that were trained to predict review po
 
 \subsubsection{Comparison of Models}
 
-The overall accuracy of each of the trained models will be detailed in this section. Out of the two baseline classifiers outlined in section ???, the `most frequent' baseline (BF) was used as a comparison due to its superior results.
+The overall accuracy of each of the trained models will be detailed in this section. Out of the two baseline classifiers outlined in section \ref{sec:DI_RF_Pol}, the `most frequent' baseline (BF) was used as a comparison due to its superior results.
 
 \paragraph{Balanced Samples}
 
@@ -62,7 +62,7 @@ The model accuracies for each of the imbalanced dataset examples, broken down by
     \label{tab:Res_RF_Pol_CompImb}
 \end{table}
 
-The BF accuracies were not consistent across samples, with the most extreme values differing by almost 10\%. This is due to inconsistencies in the percentage of reviews in the dataset that are positive when the language and length of the reviews are accounted for.
+The BF accuracies were not consistent across samples, with the most extreme values differing by almost 10\%. This is due to inconsistencies in the percentage of reviews in the dataset that were positive when the language and length of the reviews are accounted for.
 
 For the English-language samples, the BERT model produced the strongest results for the any length and short reviews. For the any length and short samples, BERT outperformed all of the other models. Both the SGD and LSVC models produced strong results for all of the English samples, with the LSVC having the highest overall accuracy for the long sample.
 
@@ -156,9 +156,9 @@ Both the English and multilingual, long samples produced consistent recall and p
 
 \subsubsection{Confusion Matrices}
 
-In this section, selected confusion matrices will be presented in order to better illustrate and expand upon some of the points made in the previous sections. A full collection of confusion matrices for the BERT and comparison models, trained against all 12 of the dataset samples, can be found in Appendix ???.
+In this section, selected confusion matrices will be presented in order to better illustrate and expand upon some of the points made in the previous sections. A full collection of confusion matrices for the BERT and comparison models, trained against all 12 of the dataset samples, can be found in Appendix \ref{sec:A1_CM}.
 
-The confusion matrices of the BERT and SGD models, tested against the balanced, English, any length sample can been in Figure \ref{fig:Res_RF_Pol_CM_EBA}. It is clear from this figure that both classifiers perform very well for both the positive and negative classes. The BERT model makes the majority of its mistakes through incorrectly labelling negative reviews as positive. The SGD model tended to make mistakes in a more balanced fashion, despite making more mistakes, in total.
+The confusion matrices of the BERT and SGD models, tested against the balanced, English, any length sample can be seen in Figure \ref{fig:Res_RF_Pol_CM_EBA}. It is clear from this figure that both classifiers perform very well for both the positive and negative classes. The BERT model makes the majority of its mistakes by incorrectly labelling negative reviews as positive. The SGD model tended to make mistakes in a more balanced fashion, despite making more mistakes, in total.
 
 \begin{figure}[ht]
     \centering
@@ -189,7 +189,7 @@ An additional example of BERT's performance against long reviews, for the imbala
 
 \subsubsection{ROC Curves}
 
-As was the case with the confusion matrices, selected ROC curves will be presented to help illustrate the performances of the trained models. A full collection of ROC curves can be found in Appendix ???.
+As was the case with the confusion matrices, selected ROC curves will be presented to help illustrate the performances of the trained models. A full collection of ROC curves can be found in Appendix \ref{sec:A1_ROC}.
 
 The ROC curves and accompanying AUC values for both the balanced and imbalanced, English, any length samples can be seen in Figures \ref{fig:Res_RF_Pol_ROC_EBA} and \ref{fig:Res_RF_Pol_ROC_EIA}, respectively. By using the baseline as a comparison, these two plots provide a clear depiction of the predictive performances of both the BERT and optimal non-BERT models, regardless of the balanced or imbalanced nature of the dataset. In both examples, the BERT model outperforms the SGD model. This difference in performance can be seen in both the curves themselves, as well as in the corresponding AUC values.
 
@@ -211,7 +211,7 @@ The other ROC curves, though not shown in this section, tend to show similar res
 
 \subsection{Votes} \label{sec:Res_RF_Votes}
 
-In this section, the performances of the models trained to predict the number of votes that reviews received will be evaluated and discussed. Out of the two baseline regressors outlined in section ???, the `mean' baseline (BM) was used as a comparison.
+In this section, the performances of the models trained to predict the number of votes that reviews received will be evaluated and discussed. Out of the two baseline regressors outlined in section \ref{sec:DI_RF_Votes}, the `mean' baseline (BM) was used as a comparison.
 
 \subsubsection{Model Loss}
 
@@ -259,7 +259,7 @@ The $R^2$ scores for each of the models can be seen in Table \ref{tab:Res_RF_Vot
     \label{tab:Res_RF_Votes_CompFit}
 \end{table}
 
-Based on these results, it becomes abundantly clear that none of the trained models are predicting the number of votes that reviews received in an accurate manner. The model with the most accurate fit, the SGD regressor tested against the long, English sample, only produced an $R^2$ value of 0.04 - a result which is barely better than a baseline regressor. In fact, two of the BERT models even produced negative $R^2$ values.
+Based on these results, it becomes abundantly clear that none of the trained models were predicting the number of votes that reviews received in an accurate manner. The model with the most accurate fit, the SGD regressor tested against the long, English sample, only produced an $R^2$ value of 0.04 - a result which is barely better than a baseline regressor. In fact, two of the BERT models even produced negative $R^2$ values.
 
 \subsection{Playtime} \label{sec:Res_RF_PT}
 
@@ -286,7 +286,7 @@ The MSE losses for each of the models, broken down by review language and length
     \label{tab:Res_RF_PT_CompLoss}
 \end{table}
 
-The losses, though not as high as those of the vote prediction models, are still quite large. For each sample, the optimal trained model does not appear to perform too much better than the baseline does. As was the case with the review votes, the BERT models tend to produce extreme results. For three of the sample, BERT performs the strongest; for two of the samples BERT performs a good deal worse than the baseline. Only one of the samples, the long, English one, sees BERT producing moderate results.
+The losses, though not as high as those of the vote prediction models, are still quite large. For each sample, the optimal trained model does not appear to perform too much better than the baseline does. As was the case with the review votes, the BERT models tend to produce extreme results. For three of the sample, BERT performs the strongest; for two of the samples, BERT performs a good deal worse than the baseline. Only one of the samples, the long, English one, sees BERT producing moderate results.
 
 Given these results, it appears that the trained models are not capable of predicting the playtime of the reviewers to a significant degree. However, the results do not seem quite as bad as those of the vote prediction models.
 
@@ -333,7 +333,7 @@ These results indicate that, regardless of the language or the distribution of t
 
 The results gathered from the models trained to predict the number of votes clearly indicated that neither BERT nor the alternative models were capable of predicting individual outcomes any better than a baseline regressor was. This result remained consistent across all of the dataset samples.
 
-Nonetheless, further investigation into this approach may be worthwhile. As was discussed in section ???, reviews could be classified based on the number of votes they received, eg top 10\% of reviews, top 20\% of reviews, etc. Another approach might be to exclude reviews which did not receive any votes, a majority of the dataset, in order to balance the sampled data. Finally, additional data balancing could be implemented by selecting an equal number of reviews with, for example, 0-5 votes, 5-20 votes, 20-100 votes, etc.
+Nonetheless, further investigation into this approach may be worthwhile. As was discussed in section \ref{sec:LR_NLP_Help}, reviews could be classified based on the number of votes they received, eg top 10\% of reviews, top 20\% of reviews, etc. Another approach might be to exclude reviews that did not receive any votes, a majority of the dataset, in order to balance the sampled data. Finally, additional data balancing could be implemented by selecting an equal number of reviews with, for example, 0-5 votes, 5-20 votes, 20-100 votes, etc.
 
 \subsubsection{Playtime}
 
@@ -351,7 +351,7 @@ The overall model performances, ie when evaluated using the entire test set and 
 
 \subsubsection{Comparison of Models}
 
-The predictive accuracies of each of the trained models will be detailed in this section. The `most frequent' baseline (BF) was used as a comparison. It is worth noting that, based on the methodology discussed in section ?, accuracies that are significantly higher than the baseline result are not expected.
+The predictive accuracies of each of the trained models will be detailed in this section. The `most frequent' baseline (BF) was used as a comparison. It is worth noting that, based on the methodology discussed in section \ref{sec:DI_RU}, accuracies that are significantly higher than the baseline result are not expected.
 
 \paragraph{Six Rating Classes}
 
@@ -530,7 +530,7 @@ The user accuracy distributions for the BF, BERT and SGD models against the 6-cl
 
 For the English sample, the superior performances of both the BERT and SGD models, relative to the BF model, are clearly displayed. The trained models consistently classify individual users more accurately than the baseline at all non-extreme minimum accuracies, ie between 10\% and 90\%. At certain points, the absolute difference between the trained models and the baseline is greater than 20\%.
 
-For the multilingual sample, the performances of the trained models and the baseline are quite similar. The BERT and BF models produce almost identical results and, although the SGD model does appear to be more slightly more accurate at times, the difference is nowhere near as pronounced as it was for the English sample.
+For the multilingual sample, the performances of the trained models and the baseline are quite similar. The BERT and BF models produce almost identical results and, although the SGD model does appear to be slightly more accurate at times, the difference is nowhere near as pronounced as it was for the English sample.
 
 \paragraph{Three Rating Classes}
 
@@ -555,13 +555,13 @@ The user accuracy distributions for the BF, BERT and SGD models and the 3-class 
     \label{fig:Res_PU_Simp_3}
 \end{figure}
 
-For both of the samples, the user accuracy distributions do not appear to be of any use. Because of the imbalanced distribution of labels and, due to the review inclusion criteria outlined in section ???, over 30\% of users have only written reviews for games which were labelled `positive'. This has resulted in the baseline classifier having a 100\% accuracy rate for more than a third of all users in the sample. This effect, combined with the inability of the trained models to outperform the baseline, means that further investigation into the determination of representative users using the 3-class samples is pointless.
+For both of the samples, the user accuracy distributions do not appear to be of any use. Because of the imbalanced distribution of labels and, due to the review inclusion criteria outlined in section \ref{sec:DI_RU}, over 30\% of users have only written reviews for games that were labelled `positive'. This has resulted in the baseline classifier having a 100\% accuracy rate for more than a third of all users in the sample. This effect, combined with the inability of the trained models to outperform the baseline, means that further investigation into the determination of representative users using the 3-class samples is pointless.
 
 \subsubsection{Percentile Selection Method}
 
 By using the user accuracy distributions, the users whose reviews, according to the trained models, are most representative of the games' average ratings can be determined. Percentiles could be employed to select the representative users. For example, only the most accurate 10\% of users, ie users in the 90\textsuperscript{th} percentile, might be considered.
 
-This selection criteria, relying solely on accuracy percentiles, would include users with a high baseline accuracy, too. For example, a user who only reviewed games that were labelled `positive' would receive a practically meaningless baseline accuracy of 100\%. A more precise selection criteria would only consider users whose BERT or SGD accuracy was, for instance, at least 20\% larger than their baseline accuracy. This method would also limit the potential pool of representative users to those who had reviewed games of various rating classes, or at very least, those who had not solely reviewed `positive' games. A potential drawback of this more precise selection method is that genuinely representative users who happened to only/mostly review `positive' games would also be excluded.
+This selection criterion, relying solely on accuracy percentiles, would include users with a high baseline accuracy, too. For example, a user who only reviewed games that were labelled `positive' would receive a practically meaningless baseline accuracy of 100\%. A more precise selection criterion would only consider users whose BERT or SGD accuracy was, for instance, at least 20\% larger than their baseline accuracy. This method would also limit the potential pool of representative users to those who had reviewed games of various rating classes, or at very least, those who had not solely reviewed `positive' games. A potential drawback of this more precise selection method is that genuinely representative users who happened to only/mostly review `positive' games would also be excluded.
 
 An example of this method, indicating the minimum user accuracies required to be in the 80\textsuperscript{th}, 90\textsuperscript{th}, 95\textsuperscript{th} and 99\textsuperscript{th} percentiles, for both the BERT and SGD models, can be found in Figure \ref{fig:Res_PU_PctsExample}. It considers only those users whose trained model accuracies were at least 20\% larger than their baseline accuracy.
 
@@ -576,7 +576,7 @@ An example of this method, indicating the minimum user accuracies required to be
 
 The baseline and accompanying trained model accuracies for each user and for each of the 6-class samples can be seen in Figures \ref{fig:Res_PU_ScatterEng} and \ref{fig:Res_PU_ScatterMul}. These plots elucidate the differences between the predictions made by the trained and baseline models.
 
-Pearson correlation coefficients are also provided in Table \ref{tab:Res_PU_Corrs} to describe the relationship between the aforementioned models' results. Each of the provided coefficients indicate a moderate correlation between the models' accuracies, with the SGD results being more strongly correlated to those of the baselines. The multilingual models are also more strongly correlated to their respective baselines than the English models.
+Pearson correlation coefficients are also provided in Table \ref{tab:Res_PU_Corrs} to describe the relationship between the aforementioned models' results. Each of the provided coefficients indicates a moderate correlation between the models' accuracies, with the SGD results being more strongly correlated to those of the baselines. The multilingual models are also more strongly correlated to their respective baselines than the English models.
 
 \begin{figure}[ht]
     \centering
@@ -607,7 +607,7 @@ Pearson correlation coefficients are also provided in Table \ref{tab:Res_PU_Corr
     \label{tab:Res_PU_Corrs}
 \end{table}
 
-These scatter plots, in combination with the correlation coefficients, indicate that, although the results of the baseline and trained models tend to be fairly similar, there are a myriad of users for whom the trained models make predictions which are a good deal more accurate than the baseline, for each combination of sample and model. It should also be noted, however, that there are plenty of users for whom the opposite effect occurs.
+These scatter plots, in combination with the correlation coefficients, indicate that, although the results of the baseline and trained models tend to be fairly similar, there is a myriad of users for whom the trained models make predictions that are a good deal more accurate than the baseline, for each combination of sample and model. It should also be noted, however, that there are plenty of users for whom the opposite effect occurs.
 
 The minimum user accuracies required to be in the 80\textsuperscript{th}, 90\textsuperscript{th}, 95\textsuperscript{th} and 99\textsuperscript{th} percentiles, for the 6-class samples, broken down by language and model, can be seen in Table \ref{tab:Res_PU_Pcts6}. Accuracy values are provided for various `percentage above baseline' (PAB) selection criteria - with a PAB of 0\% being provided as a new and alternative form of baseline.
 
@@ -633,7 +633,7 @@ The minimum user accuracies required to be in the 80\textsuperscript{th}, 90\tex
     \label{tab:Res_PU_Pcts6}
 \end{table}
 
-A point worth noting is that a larger PAB might not necessarily lead to more representative users being determined. For example, a user with an SGD/BERT accuracy of 100\% and a baseline accuracy of 75\% might be considered a representative user; however, given a PAB of 40\% the minimum included SGD/BERT accuracy would be 105\% which is, of course, impossible to achieve. Conversely, a user with an SGD/BERT accuracy of 100\% but a baseline accuracy of 90\% might not be considered particularly representative due to their high baseline accuracy; however, a smaller PAB, such as 10\%, would lead to their inclusion as a representative user. For the sake of simplicity, a PAB of 20\% will be considered as a suitable middle ground.
+A point worth noting is that a larger PAB might not necessarily lead to more representative users being determined. For example, a user with an SGD/BERT accuracy of 100\% and a baseline accuracy of 75\% might be considered a representative user; however, given a PAB of 40\% the minimum included SGD/BERT accuracy would be 105\% which is, of course, impossible to achieve. Conversely, a user with an SGD/BERT accuracy of 100\% but a baseline accuracy of 90\% might not be considered particularly representative due to their high baseline accuracy; however, a smaller PAB, such as 10\%, would lead to their inclusion as a representative user. For the sake of simplicity, a PAB of 20\% will be considered a suitable middle ground.
 
 For both the English and multilingual samples, the SGD classifier consistently required slightly higher accuracies than the BERT classifier for a given user to be included in each of the specified percentiles. For the multilingual sample, somewhat surprisingly, the required accuracies were slightly higher than those required by the English model.
 
@@ -643,9 +643,9 @@ The accuracies required for a user to be included in the 99\textsuperscript{th} 
 
 \subsection{Discussion}
 
-The approach used to determine potentially representative users was, in essence, an extension to the work done to predict review polarity. The high accuracy of the models trained to predict polarity using nothing but the review text were a clear indication that there were particular features present within the written reviews that the machine learning models could identify and utilise to make accurate predictions.
+The approach used to determine potentially representative users was, in essence, an extension of the work done to predict review polarity. The high accuracy of the models trained to predict polarity using nothing but the review text was a clear indication that there were particular features present within the written reviews that the machine learning models could identify and utilise to make accurate predictions.
 
-The representative users approach simply expanded the binary classification problem of polarity prediction into a multinomial  classification problem involving the prediction of average game ratings. The limitations involved with this approach, as well as the various assumptions that were made, have already been detailed in sections ??? and ???. In summary, a significant portion of the training data was of a poor quality and, as a result, the input text did not always `agree' with the desired output class. As was the case with polarity prediction, difficulties arose due to the distribution of output classes being highly imbalanced.
+The representative users approach simply expanded the binary classification problem of polarity prediction into a multinomial classification problem involving the prediction of average game ratings. The limitations involved with this approach, as well as the various assumptions that were made, have already been detailed in previous sections of this report In summary, a significant portion of the training data was of poor quality and, as a result, the input text did not always `agree' with the desired output class. As was the case with polarity prediction, difficulties arose due to the distribution of output classes being highly imbalanced.
 
 When evaluated based on their overall accuracies, the models trained on the 6-class samples, particularly the English-language ones, performed a good deal better than the baseline classifiers, despite all of the potential data problems that had been discussed. These results were quite promising as they indicated that the trained models were still capable of identifying predictive features in the review data, irrespective of the `noise' that was present.
 
@@ -655,6 +655,6 @@ By analysing the results of the 6-class models on a per-user basis, the users wh
 
 The users whose trained model accuracies were in the 99\textsuperscript{th} percentile were considered to be suitably representative. The SGD models required a higher user accuracy than the BERT models and thus appeared to be performing better. However, the multilingual models also required a higher user accuracy than the English models which, given the former's poorer overall performance, might indicate that the required user accuracy could potentially be a misleading or incomplete metric.
 
-Nonetheless, given that both the overall accuracy of certain 6-class models were higher than their respective baselines, and that, on a per-user basis, even when controlling for the performance of baselines, a considerable proportion of users had their reviews predicted accurately enough to be considered representative, this approach appears to show some potential and may be worthy of further investigation.
+Nonetheless, given that both the overall accuracies of certain 6-class models were higher than their respective baselines, and that, on a per-user basis, even when controlling for the performance of baselines, a considerable proportion of users had their reviews predicted accurately enough to be considered representative, this approach appears to show some potential and may be worthy of further investigation.
 
-A number of possible alterations to the methods employed when tackling this problem spring to mind. As was already discussed when evaluating the polarity prediction results, the size of the dataset samples could be substantially increased in order to improve the quality of the BERT models. The selective sampling of reviews based on their word count, a technique which was also applied to the prediction of review polarities, might be relevant to this problem, too. Reviews already considered `helpful' by the Steam community, ie those with a certain number of votes, could be exclusively sampled as a means of reducing the presence of poor quality data being used to train the models. Finally, the dataset could be sampled in a more balanced manner, with additional reviews being included for games with `mixed' or `negative' ratings.
+A number of possible alterations to the methods employed when tackling this problem spring to mind. As was already discussed when evaluating the polarity prediction results, the size of the dataset samples could be substantially increased in order to improve the quality of the BERT models. The selective sampling of reviews based on their word count, a technique that was also applied to the prediction of review polarities, might be relevant to this problem, too. Reviews already considered `helpful' by the Steam community, ie those with a certain number of votes, could be exclusively sampled as a means of reducing the presence of poor quality data being used to train the models. Finally, the dataset could be sampled in a more balanced manner, with additional reviews being included for games with `mixed' or `negative' ratings.

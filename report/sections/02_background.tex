@@ -1,4 +1,4 @@
-\chapter{Background} \label{sec:BG}
+\chapter{Steam and the Dataset} \label{sec:BG}
 
 \section{The Steam Platform} \label{sec:BG_Steam}
 
@@ -8,7 +8,7 @@ As of January 2022, there are over 60 thousand video games available in the Stea
 
 The desktop application can be split into four broad categories: the store, the community section, a user's library and a user's profile/management area.
 
-\subsection{Store}
+\subsection{Store} \label{sec:BG_Steam_Store}
 
 Games on Steam vary wildly in price with more expensive games being published by triple-A studios and cheaper games being published by smaller, independent developers \cite{SteamGamePricing}. There are over seven thousand free-to-play games available in the store \cite{SteamFreeGameCount}. Users can browse and search for games in the Steam store. Numerous search features are provided to the user including the ability to filter games by their price, their release date, their genres/tags (action, casual, indie, etc) and other characteristics or features of games such as whether or not they support gaming controllers, online multiplayer and so on.
 
@@ -45,7 +45,7 @@ A certain number of selected reviews and recent reviews are included on a game's
 
 As previously mentioned, a review consists of  a `thumbs up' or `thumbs down' rating as well as some written text. However, a review will also list the date that it was written, the amount of time that the user has played the game in total and at the time the review was written. The number of `helpful' and `funny' ratings the review received are also listed. Users can, at a later date, edit both the rating and text of their reviews and information about these edits, if any occurred, is also displayed. When writing a review a user can specify the language the review has been written in although it is not clear if this feature is always used. Finally, a review will also contain a link to the Steam profile of the reviewer as well as information about the number of games that the user owns and the number of reviews they've written. Other users can leave comments on reviews leading to nested discussion threads within the review system.
 
-\subsection{Community}
+\subsection{Community} \label{sec:BG_Steam_Comm}
 
 \subsubsection{Community Hubs}
 
@@ -55,7 +55,7 @@ Games on Steam also have what are referred to as `community hubs'. Within these 
 
 Users can also create and join groups on Steam. These groups can be associated with a single game, numerous related games or no game at all. Groups can be discovered in a game's community hub or by using Steam's `find a group' search feature. Group administrators can control the privacy of their group by making them public, private or invite-only. Groups, like community hubs, have discussion forums and chat rooms and group administrators can schedule and host community events.
 
-\subsection{Library}
+\subsection{Library} \label{sec:BG_Steam_Lib}
 
 Once a user purchases a game it is added to their library. Users can organise, update or uninstall their games from inside of their library. A game's library page differs from its storefront page. From this page users can view which of their friends are currently playing or have played the game, browse a feed of news, patches and updates related to the game and see a list of in-game achievements and trading cards that they've unlocked. They can also write, edit and view their review of the game. The game's library page also provides direct access to sections of its community hub and there is a search feature present for finding groups related to the game.
 
@@ -67,7 +67,7 @@ Achievements are rewards specified by a game's developers that are unlocked on S
 
 Trading cards are virtual items awarded to users in a somewhat random fashion as they play and progress through a particular game. Each game has a certain number of trading cards that users can collect and certain rewards are given to users upon collecting a game's full `set' of trading cards. By design, an individual user will not be able to collect every card on their own and will have to trade or purchase cards from other players of the game on a trading-specific market and forum. The rewards given to users upon completing a set of trading cards will be discussed in the sections that follow.
 
-\subsection{User Profile}
+\subsection{User Profile} \label{sec:BG_Steam_Profile}
 
 Each user has access to their own customisable Steam profile. Depending on the user in question's privacy settings, this profile can be viewed by any other user, their friends or nobody at all. Users can customise many aspects of their profile including their username, profile picture, location and a short description of themselves. A profile can be used to showcase, among other things, which games the user has played or what in-game achievements they have earned. Other users can also leave comments on a user's profile page.
 
@@ -87,11 +87,11 @@ The dataset is split into four parts: reviews, review texts, friends and groups.
 
 In total, the dataset contains full review, friendship and group membership data for 4,000,033 individual users. All users in the dataset without at least one review and one friend are excluded in the aforementioned count and in all later work.
 
-\subsection{Steam User IDs}
+\subsection{Steam User IDs} \label{sec:BG_Dataset_UIDs}
 
 Every user on Steam is given a unique user ID in the form of a 17 digit number. The URL that leads to a user's profile relies on this user ID as opposed to, for example, their username. In the case of our dataset, and potentially across Steam as a whole, only the final nine digits of a user's ID appear to vary from user to user while the first eight digits remain constant. These URLs are formatted like so:  \texttt{https://steamcommunity.com/profiles/76561198XXXXXXXXX}. Throughout the dataset, users are identified by the \texttt{profiles/76561198XXXXXXXXX} section of their profile URL.
 
-\subsection{Reviews}
+\subsection{Reviews} \label{sec:BG_Dataset_Revs}
 
 Each entry in this section of the dataset contains an indicator that the entry concerns review data, the Steam user ID for the user in question as well as an array containing data for each of the reviews they've left. Each of the entries in the review array contains the following information:
 
@@ -112,25 +112,25 @@ An example entry can be seen in Listing \ref{lst:ExampleData_Review}.
 
 \lstinputlisting[caption={An example of review data for a user with a single written review.},captionpos=b,label={lst:ExampleData_Review}]{listings/02_background/ExampleData_Review.json}
 
-\subsection{Review Texts}
+\subsection{Review Texts} \label{sec:BG_Dataset_Texts}
 
 As was the case with the reviews data, each entry in this section contains an indicator that the entry concerns review text data, the Steam user ID of the user in question and an array containing data for each of the user's reviews. Each entry in this array contains the unique ID of the game being reviewed and the review's text content. An example entry can be seen in Listing \ref{lst:ExampleData_ReviewText}.
 
 \lstinputlisting[caption={An example of review text data for a user with a single written review.},captionpos=b,label={lst:ExampleData_ReviewText}]{listings/02_background/ExampleData_ReviewText.json}
 
-\subsection{Friends}
+\subsection{Friends} \label{sec:BG_Dataset_Friends}
 
 Each entry in this section contains an indicator that the entry concerns friend data, the Steam user ID of the user in question and an array consisting of the user IDs of all of their friends. An example entry can be seen in Listing \ref{lst:ExampleData_Friend}.
 
 \lstinputlisting[caption={An example of friend data for a user with two friends.},captionpos=b,label={lst:ExampleData_Friend}]{listings/02_background/ExampleData_Friend.json}
 
-\subsection{Groups}
+\subsection{Groups} \label{sec:BG_Dataset_Groups}
 
 Each entry in this section contains an indicator that the entry concerns group data, the Steam user ID of the user in question and an array consisting of the Steam community URLs for each of the groups the user is a member of. An example entry can be seen in Listing \ref{lst:ExampleData_Group}.
 
 \lstinputlisting[caption={An example of group data for a user who is a member of two groups.},captionpos=b,label={lst:ExampleData_Group}]{listings/02_background/ExampleData_Group.json}
 
-\subsection{Conversion to CSV}
+\subsection{Conversion to CSV} \label{sec:BG_Dataset_CSV}
 
 To make the data easier to work with in Python they were converted from the JSON Lines format into the CSV format.
 

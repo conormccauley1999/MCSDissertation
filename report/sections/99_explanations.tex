@@ -1,6 +1,4 @@
-\chapter{Temporary Explanations}
-
-\textbf{Note:} this is not an actual section of the dissertation, it is just being used to temporarily hold all of the explanations/descriptions of the technical topics discussed in this report.
+\chapter{Technical Background}
 
 \section{BERT}
 
@@ -125,7 +123,7 @@ where $\mathrm{tf}(t, s)$ is the number of times $t$ occurred in $s$ and $\mathr
 
 Feature scaling is a technique in machine learning preprocessing in which the values of numerical features, which might span any range, are normalised to fit into a finite defined range such as $[0,1]$ or $[-1,1]$. A very simple scaling technique, referred to as min-max scaling in the \cite{pedregosa2011scikit} documentation, involves the mapping of a list of values into the range $[0,1]$ with the maximum original value becoming 1, the minimum original value becoming 0 and the remaining values falling somewhere in between.
 
-\subsubsection{Robust Scaling}
+\subsection{Robust Scaling}
 
 For data containing extreme or outlier values, techniques such as min-max scaling can produce poor results as most normalised values will be very similar with only the outliers being close to 0 or 1. A simplified description of robust scaling is that it scales values according to the interquartile range, ie the difference between the values in the 75th and 25th percentiles, as opposed to the median or the minimum and maximum values \cite{pedregosa2011scikit}. This technique reduces the influence of outliers on the resulting normalised values.
 
@@ -231,7 +229,7 @@ The $F_1$-score of a classifier is a measure of its overall accuracy using the h
     F_1 = \frac{2 \cdot \mathrm{Precision} \cdot \mathrm{Recall}}{\mathrm{Precision} + \mathrm{Recall}}
 \end{equation*}
 
-The use of the harmonic mean of both values rather than the arithmetic mean ensures that higher $F_1$ scores, which indicate a better result, can only occur when both precision and the recall are high themselves.
+The use of the harmonic mean of both values rather than the arithmetic mean ensures that higher $F_1$-scores, which indicate a better result, can only occur when both precision and the recall are high themselves.
 
 \subsubsection{Receiver Operating Characteristic}
 
