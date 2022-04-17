@@ -1,10 +1,10 @@
-\chapter{Technical Background}
+\chapter{Technical Background} \label{sec:TBG}
 
-\section{BERT}
+\section{BERT} \label{sec:TBG_BERT}
 
 As discussed in section \ref{sec:LR_NLP}, BERT is a transformer-based NLP model developed by Google that achieved state-of-the-art results in numerous NLP tasks when it was published in 2018 \cite{Devlin2018_BERT}.
 
-\subsection{Architecture}
+\subsection{Architecture} \label{sec:TBG_BERT_Arch}
 
 The architecture of the BERT model is based around that of a transformer, a type of deep learning model that tries to simulate the human process of attention by assigning different weights to the tokens in a given input sample based on their apparent relevance \cite{Bahdanau2014_Attention} \cite{sabharwal2021bert}.
 
@@ -19,7 +19,7 @@ Textual inputs passed into BERT are tokenised and segmented, with each part of t
 
 These inputs are then fed through multiple encoding layers which try to determine how relevant different parts of the input are to each other through the aforementioned mechanism of attention \cite{AlammarTransformer}. The outputs from the encoding layer are passed through decoding layers before being passed through a softmax function to determine the final output \cite{Devlin2018_BERT}.
 
-\subsection{Training}
+\subsection{Training} \label{sec:TBG_BERT_Train}
 
 The base BERT model was trained on over 3 billion words of data taken from English Wikipedia and BooksCorpus. The training process involved the completion of two tasks: masked language modelling and next sentence prediction. This initial training process is very time-consuming, generally taking multiple days to complete when using distributed cloud TPUs; although significant optimisations have been found that can reduce this time \cite{you2019large}.
 
@@ -31,21 +31,21 @@ This task involved the prediction of `masked' tokens in a sentence. Approximatel
 
 This task involved the determination of whether or not two sentences ought to follow each other. The model would be given an initial sentence, \texttt{A}, and then given a second sentence, \texttt{B}, which, 50\% of the time directly followed \texttt{A} in the actual dataset and 50\% of the time was picked completely at random. The model's goal was to determine whether or not \texttt{B} actually followed \texttt{A} \cite{Devlin2018_BERT}. For example, given the sentences \texttt{A} = ``I walked my dog this morning'' and \texttt{B} = ``this is an unrelated sentence'', the model should determine that \texttt{B} does not follow \texttt{A}.
 
-\subsection{Fine-tuning}
+\subsection{Fine-tuning} \label{sec:TBG_BERT_FT}
 
 The fine-tuning process involves training the base BERT model on a smaller, specialised dataset, such as a collection of Steam reviews. This procedure is far less time-consuming than the initial training process and allows BERT to be quickly adapted to any NLP task \cite{Devlin2018_BERT}.
 
-\subsection{DistilBERT}
+\subsection{DistilBERT} \label{sec:TBG_BERT_Distil}
 
 The DistilBERT model \cite{sanh2019distilbert} is a pre-trained language representation model that is based on BERT but has been reduced in size by 40\% through the process of knowledge distillation, a process that reduces the size of a machine learning model without diminishing its predictive validity \cite{hinton2015distilling}. The resulting model, according to the authors, is 60\% faster than BERT and ``retains 97\% of its language understanding capabilities''.
 
-\subsection{Exact Models Used}
+\subsection{Exact Models Used} \label{sec:TBG_BERT_Models}
 
 Two pre-trained DistilBERT models were used over the course of this project: \texttt{distilbert-base-uncased} \cite{HuggingFaceEng} for fine-tuning with English samples and \texttt{distilbert-base-multilingual-cased} \cite{HuggingFaceMulti} for fine-tuning with multilingual samples. Both of these models were taken from Hugging Face \cite{wolf2019huggingface}. 
 
-\section{Text Processing}
+\section{Text Processing} \label{sec:TBG_Text}
 
-\subsection{Preprocessing}
+\subsection{Preprocessing} \label{sec:TBG_Text_Pre}
 
 Text data is often preprocessed before it is fed into a model. This can involve the conversion of the text to lowercase, particularly when the text is written in English; the splitting of the sentence into tokens; the removal of stop words; and the construction of $n$-grams from the remaining tokens.
 
@@ -83,7 +83,7 @@ Some examples of the above processes are given in Table \ref{tab:Explain_TextPro
     \label{tab:Explain_TextProc}
 \end{table}
 
-\subsection{Vectorisation}
+\subsection{Vectorisation} \label{sec:TBG_Text_Vect}
 
 Once a sample of text has been preprocessed it can be vectorised, a process that involves the mapping of its tokens to numerical values.
 
@@ -119,21 +119,21 @@ where $\mathrm{tf}(t, s)$ is the number of times $t$ occurred in $s$ and $\mathr
     v_{t,s}' = \frac{v_{t,s}}{\sqrt{\sum_{i=0}^n v_{t,i}^2}}
 \end{equation*}
 
-\section{Feature Scaling}
+\section{Feature Scaling} \label{sec:TBG_FS}
 
 Feature scaling is a technique in machine learning preprocessing in which the values of numerical features, which might span any range, are normalised to fit into a finite defined range such as $[0,1]$ or $[-1,1]$. A very simple scaling technique, referred to as min-max scaling in the \cite{pedregosa2011scikit} documentation, involves the mapping of a list of values into the range $[0,1]$ with the maximum original value becoming 1, the minimum original value becoming 0 and the remaining values falling somewhere in between.
 
-\subsection{Robust Scaling}
+\subsection{Robust Scaling} \label{sec:TBG_FS_Robust}
 
 For data containing extreme or outlier values, techniques such as min-max scaling can produce poor results as most normalised values will be very similar with only the outliers being close to 0 or 1. A simplified description of robust scaling is that it scales values according to the interquartile range, ie the difference between the values in the 75th and 25th percentiles, as opposed to the median or the minimum and maximum values \cite{pedregosa2011scikit}. This technique reduces the influence of outliers on the resulting normalised values.
 
-\section{Machine Learning Models}
+\section{Machine Learning Models} \label{sec:TBG_ML}
 
-\subsection{Baseline Classifiers}
+\subsection{Baseline Classifiers} \label{sec:TBG_ML_BLC}
 
 Baseline or `dummy' classifiers are often used in comparison to trained models to better evaluate the trained models' performance. A simple baseline classifier is one that always predicts the most common label in the training data. A uniformly random classifier would predict any one of the labels in the training data at random, with each label having the same likelihood of being predicted. A slightly more advanced random classifier, which is better suited to data with more than two labels, would predict any one of the labels in the training data at random, with label probabilities being proportional to how often they actually occur in the data \cite{pedregosa2011scikit}.
 
-\subsection{Naive Bayes Classifiers}
+\subsection{Naive Bayes Classifiers} \label{sec:TBG_NB}
 
 NB classifiers utilise Bayes' theorem to make predictions based on conditional probability, eg the probability that a sample should be classified as positive given a certain input feature. The meaning of the term `naive' comes from the fact that, when determining an overall classification based on numerous input features, conditional independence is naively assumed to exist between each set of input features which vastly reduces the amount of time and memory required to carry out calculations \cite{dangeti2017statistics}. As a result, NB classifiers tend to be very efficient \cite{pedregosa2011scikit}.
 
@@ -145,7 +145,7 @@ A multinomial naive Bayes (MNB) classifier is a type of NB classifier that is pa
 
 A complement naive Bayes (CNB) classifier is an adapted version of the MNB classifier which is better suited towards imbalanced datasets due to the fact that it is trained using the complement of the desired class, ie the probability that the given sample is \textit{not} a member of the desired class \cite{pedregosa2011scikit} \cite{rennie2003tackling}.
 
-\subsection{Support Vector Machines}
+\subsection{Support Vector Machines} \label{sec:TBG_ML_SVM}
 
 Support vector machines (SVM), specifically linear SVMs, are a group of machine learning models that can be used for both classification and regression. When trained for classification, linear SVMs attempt to find a linear separation between both classes in the training data, using a hyperplane, while also maximising the distance between training points on the separation boundaries and the hyperplane itself \cite{dangeti2017statistics}. When more than two classes are present a one-vs-rest strategy is used to break the classification problem down into multiple binary classification problems \cite{pedregosa2011scikit}. An illustration of an SVM classifier can be seen in Figure \ref{fig:Explain_LSVC}.
 
@@ -162,17 +162,17 @@ When trained for regression, linear SVMs attempt to fit a hyperplane to the trai
 
 Stochastic gradient descent (SGD) is an optimisation algorithm for minimising the cost function of a machine learning model, over numerous iterations, using approximations of the function's actual gradient calculated from multiple subsets of the training data. SGD is highly efficient and can be used for both classification and regression problems. SGD can be used in linear SVM classifiers and regressors \cite{pedregosa2011scikit}.
 
-\subsection{Baselines Regressors}
+\subsection{Baselines Regressors} \label{sec:TBG_BLR}
 
 As was the case with classifiers, baseline or `dummy' regressors are often used in comparison to trained models. Two simple examples of baseline regressors are those that always predict either the mean or the median of the values in the training data \cite{pedregosa2011scikit}.
 
-\subsection{Ridge Regressors}
+\subsection{Ridge Regressors} \label{sec:TBG_ML_Ridge}
 
 Ridge regression models use least squares regression combined with a regularisation penalty, which includes the sum of the squares of the regression coefficients in the cost function in order to reduce overfitting \cite{dangeti2017statistics}.
 
-\section{Evaluation Metrics}
+\section{Evaluation Metrics} \label{sec:TBG_Eval}
 
-\subsection{Classification}
+\subsection{Classification} \label{sec:TBG_Eval_Class}
 
 \subsubsection{True and Predicted Labels}
 
@@ -246,7 +246,7 @@ The decision threshold of a classifier is the value at which a predicted probabi
 
 The area under the curve (AUC) is simply the total area underneath an ROC curve. The AUC can range from 0 to 1 with larger values indicating a better classifier. The AUC can be considered a numerical overview or summary of an ROC curve.
 
-\subsection{Regression}
+\subsection{Regression} \label{sec:TBG_Eval_Regress}
 
 \subsubsection{Mean Squared Error}
 

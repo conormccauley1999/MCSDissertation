@@ -40,7 +40,7 @@ The majority of groups in the dataset only contain a single member and most user
 
 \section{Reviews} \label{sec:Dataset_Reviews}
 
-\subsection{Number of Reviews}
+\subsection{Number of Reviews} \label{sec:Dataset_Reviews_NR}
 
 The number of reviews users have written as well as the number of reviews that games have can be seen in Figure \ref{fig:Dataset_HistsReviews}. Users who have written more than 22 reviews, 3\% of all users, and games with more than 161 reviews, 8\% of all games, have been excluded from their respective histograms. The mean number of reviews users have written is 4.6 (\textit{SD} = 16.8) and the median is 2. The mean number of reviews games have is 165.5 (\textit{SD} = 3611.1) and the median is 7. As was the case with groups, the values given for the number of reviews that games have is limited to those reviews included in the dataset as opposed to all reviews on Steam.
 
@@ -65,7 +65,7 @@ Most users in the dataset have only written a single review and 75\% of users ha
     \label{fig:Dataset_HistsReviews}
 \end{figure}
 
-\subsection{Polarities}
+\subsection{Polarities} \label{sec:Dataset_Reviews_P}
 
 The distribution of users based on the proportion of their reviews that are positive can be seen in Figure \ref{fig:Dataset_HistsPolarities}. When all users are considered, the mean positive proportion is 88.5\% (\textit{SD} = 25.2\%) and the median is 100\%. When only users who have written at least five reviews are considered, the mean positive proportion is 85.8\% (\textit{SD} = 16.5\%) and the median is 90\%.
 
@@ -90,9 +90,9 @@ When all users are considered the vast majority of users have a positive proport
     \label{fig:Dataset_HistsPolarities}
 \end{figure}
 
-\subsection{Miscellaneous Features}
+\subsection{Miscellaneous Features} \label{sec:Dataset_Reviews_MF}
 
-The distribution of some review features can be seen in Figure \ref{fig:Dataset_BarsCounts}. Across the dataset, 85\% of reviews are positive, 9.6\% are for an early access game and 14.4\% were updated by the author at some point.
+The distribution of some review features can be seen in Figure \ref{fig:Dataset_BarsCounts}. Across the dataset, 85\% of reviews are positive, 9.6\% are for an early access game and 14.4\% have been updated by the author at some point.
 
 \begin{figure}[ht]
     \centering
@@ -101,7 +101,7 @@ The distribution of some review features can be seen in Figure \ref{fig:Dataset_
     \label{fig:Dataset_BarsCounts}
 \end{figure}
 
-\subsection{Timestamps}
+\subsection{Timestamps} \label{sec:Dataset_Reviews_TS}
 
 The years in which reviews were written can be seen in Figure \ref{fig:Dataset_BarsTimestamps}.
 
@@ -112,7 +112,7 @@ The years in which reviews were written can be seen in Figure \ref{fig:Dataset_B
     \label{fig:Dataset_BarsTimestamps}
 \end{figure}
 
-\subsection{Playtime}
+\subsection{Playtime} \label{sec:Dataset_Reviews_PT}
 
 The amount of hours that users played the games they reviewed (in total) can be seen in Figure \ref{fig:Dataset_HistPlaytimes}. Reviews where the user played the game for over 152.4 hours, 16.4\% of all reviews, have been excluded from the histogram. The mean amount of hours users played the games they reviewed is 159.1 (\textit{SD} = 540.6) and the median is 12.2. 25\% of users played the game they reviewed for 2.9 hours or less and 75\% of users played the game they reviewed for 62.7 hours or less.
 
@@ -123,7 +123,7 @@ The amount of hours that users played the games they reviewed (in total) can be 
     \label{fig:Dataset_HistPlaytimes}
 \end{figure}
 
-\subsection{Votes}
+\subsection{Votes} \label{sec:Dataset_Reviews_V}
 
 The number of votes up that reviews received can be seen in Figure \ref{fig:Dataset_HistVotes}. Reviews with more than 17 votes, 4.5\% of all reviews, have been excluded from the histogram. The mean number of votes reviews received is 4.3 (\textit{SD} = 22.9) and the median is 0. A majority of reviews didn't receive a single vote and 75\% of reviews received 2 votes or fewer.
 
@@ -138,7 +138,7 @@ The number of votes up that reviews received can be seen in Figure \ref{fig:Data
 
 The language each review was written in and the number of words each review contained was determined for nearly 70\% of all reviews in the dataset using the spaCy library in Python \cite{spacy}. Language detection is implemented using a Python port \cite{PyPi_LangDetect} of Google's language-detection library \cite{Nakatani2010_LangDetect} which supports over 50 languages.
 
-\subsection{Languages}
+\subsection{Languages} \label{sec:Dataset_RT_Langs}
 
 The proportion of languages each review was written in can be seen in Figure \ref{fig:Dataset_BarsLangs}. Languages that less than 1\% of reviews are written in are excluded. Language proportions are shown for all reviews and for reviews with at least five words. When all reviews are considered the language detection algorithm fails to identify the language in approximately 3\% of reviews. When reviews with at least five words are considered this failure to identify the language occurs much less frequently and the proportion of reviews written in English increases to almost 50\%.
 
@@ -163,7 +163,7 @@ The proportion of languages each review was written in can be seen in Figure \re
 
 \footnotetext[1]{Chinese (Simplified)}
 
-\subsection{Word Count}
+\subsection{Word Count} \label{sec:Dataset_RT_Words}
 
 The number of words in English-language reviews can be seen in Figure \ref{fig:Dataset_HistWordsEng}. Reviews with more than 277 words, 4.5\% of all such reviews, have been excluded from the histogram. The mean number of words in reviews is 62.7 (\textit{SD} = 134.3) and the median is 20. 25\% of reviews contain 8 words or fewer while 75\% contain 57 words or fewer.
 
